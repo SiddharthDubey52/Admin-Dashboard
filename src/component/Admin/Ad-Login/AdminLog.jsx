@@ -1,5 +1,8 @@
 import React, { useState } from 'react'
 import styles from './AdminLog.module.css'
+import { baseurl, decryptText, encryptText } from '../../../utils/encryptdecrypt'
+import axios from 'axios'
+import { useNavigate } from 'react-router-dom'
 
 const AdminLog = () => {
   const [formData, setFormData] = useState({
@@ -9,7 +12,10 @@ const AdminLog = () => {
   const [isLoading, setIsLoading] = useState(false)
   const [message, setMessage] = useState('')
   const [messageType, setMessageType] = useState('')
-
+  const navigate = useNavigate();
+   const navigateDash = () => {
+         navigate('addtrainer');
+   }
   const handleInputChange = (e) => {
     const { name, value } = e.target
     setFormData(prev => ({
@@ -22,39 +28,24 @@ const AdminLog = () => {
       setMessageType('')
     }
   }
-
+console.log(formData)
   const handleSubmit = async (e) => {
     e.preventDefault()
-    
-    // Basic validation
-    if (!formData.username.trim() || !formData.password.trim()) {
-      setMessage('Please fill in all fields')
-      setMessageType('error')
-      return
-    }
+    const encryptdata = await encryptText(formData);
+    console.log("Encrypted Data:", encryptdata);
+    try{
+          const response = await axios.post(`${baseurl}/adlogin`,{
+            body: encryptdata
+          })
+          const decryptResponse = await decryptText(response.data.data)
+          // console.log("Response:", response.data.data);
+          console.log("Decrypted Response:", decryptResponse);
+          const token = decryptResponse.token;
+          localStorage.setItem('token', token);
+          navigateDash();
 
-    setIsLoading(true)
-    setMessage('')
-    
-    try {
-      // Simulate API call - replace with actual authentication logic
-      await new Promise(resolve => setTimeout(resolve, 1000))
-      
-      // For demo purposes - replace with actual authentication
-      if (formData.username === 'admin' && formData.password === 'admin123') {
-        setMessage('Login successful!')
-        setMessageType('success')
-        // Here you would typically redirect or update global state
-        console.log('Login successful for:', formData.username)
-      } else {
-        setMessage('Invalid username or password')
-        setMessageType('error')
-      }
-    } catch (error) {
-      setMessage('Login failed. Please try again.')
-      setMessageType('error')
-    } finally {
-      setIsLoading(false)
+    }catch (error) {
+      console.error("Login error:", error);
     }
   }
 
