@@ -1,9 +1,9 @@
 // Frontend Encryption/Decryption Utility
 // Browser-compatible implementation using Web Crypto API
 
-const keyHex = "a018e2e3f9ef13aba39ea3116f2d668c662f42f70f8848fdb97d2aa611698fed";
-const ivHex = "56ea83bf15eb255fb11dddc9ca168fe8";
-const baseUrl = "https://example.com/api";
+const keyHex = "d032ec23daae2a3260d1f6d0d871b2fef0abbdece8ca986f49c93fb9e283e1d0";
+const ivHex = "ba81fc0dfda4ad7b0571bc4dbaa77143";
+
 const algorithm = "AES-CBC";
 const textEncoder = new TextEncoder();
 const textDecoder = new TextDecoder();
