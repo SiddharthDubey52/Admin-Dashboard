@@ -8,9 +8,9 @@ import AdminLog from "../component/Admin/Ad-Login/AdminLog";
 import Home from "../pages/Home";
 import About from "../pages/About";
 import Dashboard from "../pages/Dashboard";
-import TrainerLogin from "../component/Trainers/TraLogin/TrainerLogin";
+import TrainerLogin from "../component/Trainers/TrainerLogin/TrainerLogin";
 import AddTrainer from "../component/Admin/Ad-Dash/pages/AddTrainer";
-import TrainerDash from "../component/Trainers/TraLogin/TrainerDash";
+import TrainerDash from "../component/Trainers/TrainerDash/TrainerDash";
 
 // import LandingNavbar from "../components/landing-page/Navbar/LandingNavbar";
 // import DashboardLayout from "../components/User_dashboard/DashboardLayout";
