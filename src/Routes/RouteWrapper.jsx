@@ -9,6 +9,8 @@ import Home from "../pages/Home";
 import About from "../pages/About";
 import Dashboard from "../pages/Dashboard";
 import TrainerLogin from "../component/Trainers/TraLogin/TrainerLogin";
+import TrainerTab from "../component/Admin/Ad-Dash/pages/TrainerTab";
+
 // import LandingNavbar from "../components/landing-page/Navbar/LandingNavbar";
 // import DashboardLayout from "../components/User_dashboard/DashboardLayout";
 // import Footer from "../components/landing-page/Footer/Footer";
@@ -48,7 +50,7 @@ const RouteWrapper = () => {
         <Route path="/admin" element={<AdminLog />} />
         <Route path="/login" element={<AdminLog />} />
         <Route path="/trainer" element={<TrainerLogin />} />
-
+        <Route path="/TrainerTab" element={<TrainerTab />} />
         {/* Protected Dashboard Routes */}
         <Route path="/dashboard" element={<Dashboard />} />
         
