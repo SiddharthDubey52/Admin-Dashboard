@@ -14,7 +14,7 @@ const AdminLog = () => {
   const [messageType, setMessageType] = useState('')
   const navigate = useNavigate();
    const navigateDash = () => {
-         navigate('addtrainer');
+         navigate('dashboard');
    }
   const handleInputChange = (e) => {
     const { name, value } = e.target
