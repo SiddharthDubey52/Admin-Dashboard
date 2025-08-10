@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import styles from "./TrainerTab.module.css";
 import { Eye, X } from "lucide-react";
+import AddTrainer from "./AddTrainer";
 
 const TrainerTab = () => {
   const [trainers, setTrainers] = useState([
@@ -43,6 +44,7 @@ const TrainerTab = () => {
   ]);
 
   const [selectedTrainer, setSelectedTrainer] = useState(null);
+  const [showAddTrainer, setShowAddTrainer] = useState(false);
 
   const toggleStatus = (id) => {
     setTrainers((prev) =>
@@ -60,13 +62,21 @@ const TrainerTab = () => {
     setSelectedTrainer(null);
   };
 
+  const openAddTrainer = () => {
+    setShowAddTrainer(true);
+  };
+
+  const closeAddTrainer = () => {
+    setShowAddTrainer(false);
+  };
+
   return (
     <div className={styles.container}>
       <div className={styles.card}>
         {/* Header */}
         <div className={styles.subHeader}>
           <h2 className={styles.subTitle}>Role Management</h2>
-          <button className={styles.createBtn}>Create New Role</button>
+          <button className={styles.createBtn} onClick={openAddTrainer}>Create New Role</button>
         </div>
 
         {/* Table */}
@@ -158,6 +168,18 @@ const TrainerTab = () => {
                 ))}
               </tbody>
             </table>
+          </div>
+        </div>
+      )}
+
+      {/* AddTrainer Modal */}
+      {showAddTrainer && (
+        <div className={styles.modalOverlay}>
+          <div className={styles.modal}>
+            <button className={styles.closeBtn} onClick={closeAddTrainer}>
+              <X size={20} />
+            </button>
+            <AddTrainer onClose={closeAddTrainer} />
           </div>
         </div>
       )}

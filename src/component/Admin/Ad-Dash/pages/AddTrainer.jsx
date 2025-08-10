@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import styles from "./AddTrainer.module.css";
 
-const AddTrainer = () => {
+const AddTrainer = ({ onClose }) => {
   const [formData, setFormData] = useState({
     name: "",
     empId: "",
@@ -32,10 +32,15 @@ const AddTrainer = () => {
     });
 
     alert("Trainer added successfully!");
+    
+    // Close the modal after successful submission
+    if (onClose) {
+      onClose();
+    }
   };
 
   return (
-    <div className={styles.container}>
+    <div className={styles.modalContent}>
       <div className={styles.box}>
         <h2 className={styles.title}>Add Trainer</h2>
         <form onSubmit={handleSubmit} className={styles.form}>

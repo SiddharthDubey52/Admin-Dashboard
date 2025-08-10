@@ -134,6 +134,30 @@
   padding: 12px;
   background: hsl(210, 40%, 98%);
   border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  border: none;
+  width: 100%;
+  text-align: left;
+}
+
+.userCard:hover {
+  background: hsl(0, 84%, 95%);
+  transform: translateX(2px);
+}
+
+.userCard:active {
+  background: hsl(0, 84%, 90%);
+}
+
+.userCard span {
+  font-size: 14px;
+  font-weight: 500;
+  color: hsl(0, 84%, 40%);
+}
+
+.userCard:hover span {
+  color: hsl(0, 84%, 30%);
 }
 
 .userAvatar {

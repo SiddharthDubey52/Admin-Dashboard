@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import styles from "./Sidebar.module.css";
+import TrainerTab from "../pages/TrainerTab";
 import { 
   BarChart3, 
   Users, 
@@ -17,25 +18,23 @@ import {
   Bell, 
   Mail, 
   ChevronDown, 
-  ChevronUp 
+  ChevronUp, 
+  LogOut
 } from "lucide-react";
+import axios from "axios";
+import { baseurl } from "../../../../utils/encryptdecrypt";
 const Sidebar = ({ children }) => {
   const navigate = useNavigate();
   const location = useLocation();
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [activeContent, setActiveContent] = useState('dashboard');
 
    const menuItems = [
-    { path: "/dashboard", label: "Dashboard", icon: BarChart3 },
-    { path: "/users", label: "Users", icon: Users },
-    { path: "/analytics", label: "Analytics", icon: TrendingUp },
-    { path: "/products", label: "Products", icon: Package },
-    { path: "/orders", label: "Orders", icon: ShoppingCart },
-    { path: "/reports", label: "Reports", icon: FileText },
-    { path: "/finance", label: "Finance", icon: DollarSign },
-    { path: "/settings", label: "Settings", icon: Settings },
-    { path: "/help", label: "Help & Support", icon: HelpCircle }
+    { path: "/dashboard", label: "Dashboard", icon: BarChart3, content: 'dashboard' },
+    { path: "/trainers", label: "Trainers", icon: Users, content: 'trainers' },
+    
   ];
-
+   const token = localStorage.getItem('token');
   const getPageTitle = () => {
     const currentPath = location.pathname === "/" ? "/dashboard" : location.pathname;
     const currentItem = menuItems.find(item => item.path === currentPath);
@@ -58,11 +57,32 @@ const Sidebar = ({ children }) => {
     return subtitles[currentPath] || "Admin Dashboard";
   };
 
-  const handleMenuClick = (path) => {
-    navigate(path);
+  const handleMenuClick = (path, content) => {
+    setActiveContent(content);
     setSidebarOpen(false);
+    // Don't navigate away from dashboard route, just change content
+    if (location.pathname !== '/dashboard') {
+      navigate('/dashboard');
+    }
   };
+  const handleLogout = async() => {
+        try{
+         const response = await axios.post(`${baseurl}/logout`,{},{
+          headers : {
+            Authorization: token
+          }
+         })
 
+          console.log("Logout Response:", response.data);
+          
+          // Clear localStorage and redirect to login
+          localStorage.removeItem('token');
+          navigate('/');
+
+        } catch(error) {
+         console.error("Logout error:", error);
+        }
+  }
   const toggleSidebar = () => {
     setSidebarOpen(!sidebarOpen);
   };
@@ -103,12 +123,12 @@ const Sidebar = ({ children }) => {
         {/* Navigation Menu */}
         <nav className={styles.navigation}>
           {menuItems.slice(0, 7).map((item) => {
-            const isActive = location.pathname === item.path || (location.pathname === "/" && item.path === "/dashboard");
+            const isActive = activeContent === item.content;
             return (
               <button
                 key={item.path}
                 className={`${styles.menuItem} ${isActive ? styles.menuItemActive : ''}`}
-                onClick={() => handleMenuClick(item.path)}
+                onClick={() => handleMenuClick(item.path, item.content)}
               >
                 <i className={`${item.icon} ${styles.menuIcon}`}></i>
                 <span>{item.label}</span>
@@ -119,12 +139,12 @@ const Sidebar = ({ children }) => {
           <div className={styles.divider}></div>
 
           {menuItems.slice(7).map((item) => {
-            const isActive = location.pathname === item.path;
+            const isActive = activeContent === item.content;
             return (
               <button
                 key={item.path}
                 className={`${styles.menuItem} ${isActive ? styles.menuItemActive : ''}`}
-                onClick={() => handleMenuClick(item.path)}
+                onClick={() => handleMenuClick(item.path, item.content)}
               >
                 <i className={`${item.icon} ${styles.menuIcon}`}></i>
                 <span>{item.label}</span>
@@ -135,20 +155,14 @@ const Sidebar = ({ children }) => {
 
         {/* User Profile Section */}
         <div className={styles.userProfile}>
-          <div className={styles.userCard}>
-            <img 
-              src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=150&h=150" 
-              alt="Admin profile" 
-              className={styles.userAvatar}
-            />
-            <div className={styles.userInfo}>
-              <p className={styles.userName}>John Anderson</p>
-              <p className={styles.userRole}>Administrator</p>
-            </div>
-            <button className={styles.userMenuButton}>
-              <i className="fas fa-chevron-up"></i>
-            </button>
-          </div>
+          <button 
+            className={styles.userCard}
+            onClick={handleLogout}
+            type="button"
+          >
+            <LogOut size={20} />
+            <span>Logout</span>
+          </button>
         </div>
       </div>
 
@@ -204,6 +218,55 @@ const Sidebar = ({ children }) => {
 
         {/* Content Area */}
         <main className={styles.contentArea}>
+          {activeContent === 'trainers' && <TrainerTab />}
+          {activeContent === 'dashboard' && (
+            <div>
+              <h2>Dashboard Content</h2>
+              <p>Welcome to the admin dashboard!</p>
+            </div>
+          )}
+          {activeContent === 'analytics' && (
+            <div>
+              <h2>Analytics</h2>
+              <p>Analytics content will be here</p>
+            </div>
+          )}
+          {activeContent === 'products' && (
+            <div>
+              <h2>Products</h2>
+              <p>Products content will be here</p>
+            </div>
+          )}
+          {activeContent === 'orders' && (
+            <div>
+              <h2>Orders</h2>
+              <p>Orders content will be here</p>
+            </div>
+          )}
+          {activeContent === 'reports' && (
+            <div>
+              <h2>Reports</h2>
+              <p>Reports content will be here</p>
+            </div>
+          )}
+          {activeContent === 'finance' && (
+            <div>
+              <h2>Finance</h2>
+              <p>Finance content will be here</p>
+            </div>
+          )}
+          {activeContent === 'settings' && (
+            <div>
+              <h2>Settings</h2>
+              <p>Settings content will be here</p>
+            </div>
+          )}
+          {activeContent === 'help' && (
+            <div>
+              <h2>Help & Support</h2>
+              <p>Help content will be here</p>
+            </div>
+          )}
           {children}
         </main>
       </div>

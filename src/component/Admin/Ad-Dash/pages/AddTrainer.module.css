@@ -7,6 +7,11 @@
   min-height: 100vh;
 }
 
+.modalContent {
+  width: 100%;
+  max-width: 500px;
+}
+
 .box {
   background: #ffffff; /* solid white */
   padding: 30px;
