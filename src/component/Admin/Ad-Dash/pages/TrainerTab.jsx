@@ -1,47 +1,12 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import styles from "./TrainerTab.module.css";
 import { Eye, X } from "lucide-react";
 import AddTrainer from "./AddTrainer";
+import { baseurl, decryptText } from "../../../../utils/encryptdecrypt";
+import axios from "axios";
 
 const TrainerTab = () => {
-  const [trainers, setTrainers] = useState([
-    {
-      id: "EMP001",
-      name: "John Doe",
-      role: "Senior Trainer",
-      status: true,
-      email: "john.doe@example.com",
-      phone: "+1 234 567 890",
-      profileImg: "https://randomuser.me/api/portraits/men/32.jpg",
-      batches: [
-        {
-          code: "BATCH001",
-          timing: "Mon, Wed 10:00 AM",
-          students: 15,
-          start: "2024-01-01",
-          end: "2024-06-30",
-        },
-      ],
-    },
-    {
-      id: "EMP002",
-      name: "Jane Smith",
-      role: "Junior Trainer",
-      status: true,
-      email: "jane.smith@example.com",
-      phone: "+1 987 654 321",
-      profileImg: "https://randomuser.me/api/portraits/women/44.jpg",
-      batches: [
-        {
-          code: "BATCH002",
-          timing: "Tue, Thu 2:00 PM",
-          students: 20,
-          start: "2024-02-01",
-          end: "2024-07-30",
-        },
-      ],
-    },
-  ]);
+  const [trainers, setTrainers] = useState([]);
 
   const [selectedTrainer, setSelectedTrainer] = useState(null);
   const [showAddTrainer, setShowAddTrainer] = useState(false);
@@ -69,7 +34,25 @@ const TrainerTab = () => {
   const closeAddTrainer = () => {
     setShowAddTrainer(false);
   };
-
+  const token = localStorage.getItem('token');
+   const fetchTrainers = async () => {
+        try {
+          const response = await axios.get(`${baseurl}/trainers`,{
+            headers : {
+              Authorization:token
+            }
+          })
+          // console.log("Trainers Data:", response.data);
+          const decryptedData = await decryptText(response.data.data);
+          console.log("Decrypted Trainers Data:", decryptedData);
+          setTrainers(decryptedData.trainers)
+        } catch (error) {
+          
+        }
+      }
+     useEffect(() => {
+      fetchTrainers();
+     },[])
   return (
     <div className={styles.container}>
       <div className={styles.card}>
@@ -95,14 +78,14 @@ const TrainerTab = () => {
               {trainers.map((trainer) => (
                 <tr key={trainer.id}>
                   <td>{trainer.name}</td>
-                  <td>{trainer.id}</td>
+                  <td>{trainer.empId}</td>
                   <td>{trainer.role}</td>
                   <td>
                     <label className={styles.switch}>
                       <input
                         type="checkbox"
                         checked={trainer.status}
-                        onChange={() => toggleStatus(trainer.id)}
+                        onChange={() => toggleStatus(trainer._id)}
                       />
                       <span className={styles.slider}></span>
                     </label>

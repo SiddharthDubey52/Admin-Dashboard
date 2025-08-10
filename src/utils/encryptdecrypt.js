@@ -4,7 +4,7 @@
 const keyHex = "a018e2e3f9ef13aba39ea3116f2d668c662f42f70f8848fdb97d2aa611698fed";
 const ivHex = "56ea83bf15eb255fb11dddc9ca168fe8";
 // export const baseurl = "http://10.10.60.190:3001/api/v1/";
-export const baseurl = "https://encrypted-login1.onrender.com/api/v1/";
+export const baseurl = "https://devops-backend-hs4p.onrender.com/api/v1/";
 // export const baseurl = "http://localhost:3001/api/v1/"
 const algorithm = "AES-CBC";
 const textEncoder = new TextEncoder();

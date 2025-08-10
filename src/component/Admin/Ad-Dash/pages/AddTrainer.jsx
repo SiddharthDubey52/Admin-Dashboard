@@ -18,27 +18,33 @@ const AddTrainer = ({ onClose }) => {
     });
   };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
+  const handleSubmit = async(e) => {
+    // e.preventDefault();
 
-    console.log("Trainer Data:", formData);
+    // console.log("Trainer Data:", formData);
 
-    setFormData({
-      name: "",
-      empId: "",
-      email: "",
-      phone: "",
-      password: "",
-    });
+    // setFormData({
+    //   name: "",
+    //   empId: "",
+    //   email: "",
+    //   phone: "",
+    //   password: "",
+    // });
 
-    alert("Trainer added successfully!");
+    // alert("Trainer added successfully!");
     
     // Close the modal after successful submission
+    try {
+      
+      
+    } catch (error) {
+      
+    }
     if (onClose) {
       onClose();
     }
   };
-
+     
   return (
     <div className={styles.modalContent}>
       <div className={styles.box}>
