@@ -58,8 +58,8 @@ const RouteWrapper = () => {
         {/* <Route path="/trainerdash" element={<TrainerDash/>}/> */}
         <Route path="/TrainerTab" element={<TrainerTab />} />
         {/* Protected Dashboard Routes */}
-        <Route path="/dashboard" element={<Dashboard />} />
-        
+        <Route path="/dashboard" element={<Sidebar />} />
+
         {/* Future Dashboard Routes under layout */}
         {/* <Route element={<DashboardLayout />}>
           <Route path="/dashboard" element={<Dashboard />} />
