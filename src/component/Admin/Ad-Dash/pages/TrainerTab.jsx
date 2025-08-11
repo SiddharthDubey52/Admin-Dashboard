@@ -156,7 +156,9 @@ const TrainerTab = () => {
   // Close dropdown when clicking outside
   useEffect(() => {
     const handleClickOutside = (event) => {
-      if (openDropdown && !event.target.closest(`.${styles.dropdownContainer}`)) {
+      if (openDropdown && 
+          !event.target.closest(`.${styles.dropdownContainer}`) &&
+          !event.target.closest(`.${styles.mobileDropdownContainer}`)) {
         setOpenDropdown(null);
       }
     };
@@ -391,24 +393,29 @@ const TrainerTab = () => {
                           {openDropdown === trainer._id && (
                             <motion.div
                               className={styles.mobileDropdown}
-                              initial={{ opacity: 0, scale: 0.9 }}
-                              animate={{ opacity: 1, scale: 1 }}
-                              exit={{ opacity: 0, scale: 0.9 }}
+                              initial={{ opacity: 0, scale: 0.9, y: -10 }}
+                              animate={{ opacity: 1, scale: 1, y: 0 }}
+                              exit={{ opacity: 0, scale: 0.9, y: -10 }}
+                              transition={{ duration: 0.2 }}
                             >
-                              <button
+                              <motion.button
                                 className={styles.mobileDropdownItem}
                                 onClick={() => openEditTrainer(trainer)}
+                                whileHover={{ backgroundColor: 'rgba(59, 130, 246, 0.08)' }}
+                                whileTap={{ scale: 0.95 }}
                               >
                                 <Edit size={16} />
                                 Edit
-                              </button>
-                              <button
+                              </motion.button>
+                              <motion.button
                                 className={`${styles.mobileDropdownItem} ${styles.deleteMobileItem}`}
                                 onClick={() => openDeleteConfirm(trainer)}
+                                whileHover={{ backgroundColor: 'rgba(239, 68, 68, 0.08)' }}
+                                whileTap={{ scale: 0.95 }}
                               >
                                 <Trash2 size={16} />
                                 Delete
-                              </button>
+                              </motion.button>
                             </motion.div>
                           )}
                         </AnimatePresence>
