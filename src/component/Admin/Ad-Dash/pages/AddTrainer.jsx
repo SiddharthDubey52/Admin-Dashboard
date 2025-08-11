@@ -4,7 +4,7 @@ import { baseurl, decryptText, encryptText } from "../../../../utils/encryptdecr
 import axios from "axios";
 import { toast } from "react-toastify";
 
-const AddTrainer = ({ onClose }) => {
+const AddTrainer = ({ onClose, onSuccess }) => {
   const [formData, setFormData] = useState({
     name: "",
     empId: "",
@@ -23,21 +23,6 @@ const AddTrainer = ({ onClose }) => {
   console.log("Form Data:", formData);
   const token = localStorage.getItem("token");
   const handleSubmit = async(e) => {
-    // e.preventDefault();
-
-    // console.log("Trainer Data:", formData);
-
-    // setFormData({
-    //   name: "",
-    //   empId: "",
-    //   email: "",
-    //   phone: "",
-    //   password: "",
-    // });
-
-    // alert("Trainer added successfully!");
-    
-    // Close the modal after successful submission
     e.preventDefault();
     const encryptedData = await encryptText(formData);
     
@@ -49,17 +34,30 @@ const AddTrainer = ({ onClose }) => {
           Authorization: token
         }
       })
-      const decryptedData = await decryptText(response.data);
+      const decryptedData = await decryptText(response.data.data);
       console.log("Decrypted Response Data:", decryptedData);
+      
+      toast.success("Trainer added successfully!");
+      
+      setFormData({
+        name: "",
+        empId: "",
+        email: "",
+        phone: "",
+        password: "",
+      });
+      
+      if (onSuccess) {
+        onSuccess(); // Refresh the trainers list
+      }
+      
+      if (onClose) {
+        onClose();
+      }
     } catch (error) {
       const decryptederror = await decryptText(error.response.data.data)
-   toast.error(decryptederror.error)
+      toast.error(decryptederror.error)
       console.log("Error adding trainer:", decryptederror);
-
-
-    }
-    if (onClose) {
-      onClose();
     }
   };
      

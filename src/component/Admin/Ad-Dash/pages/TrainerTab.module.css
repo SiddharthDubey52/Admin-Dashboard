@@ -225,7 +225,7 @@ input:checked + .slider:before {
 
 /* === Actions Column === */
 .actionsCol {
-  width: 80px;
+  width: 120px;
 }
 
 .actions {
@@ -233,6 +233,7 @@ input:checked + .slider:before {
   justify-content: flex-start;
   align-items: center;
   gap: 10px;
+  position: relative;
 }
 
 .iconButton {
@@ -244,6 +245,48 @@ input:checked + .slider:before {
 .iconButton:hover {
   transform: scale(1.1);
   color: #1d4ed8;
+}
+
+/* === Dropdown Menu === */
+.dropdownContainer {
+  position: relative;
+}
+
+.dropdown {
+  position: absolute;
+  top: 100%;
+  right: 0;
+  background: white;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  z-index: 100;
+  min-width: 120px;
+  padding: 4px 0;
+  animation: dropdownFadeIn 0.2s ease-out;
+}
+
+.dropdownItem {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 16px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  color: #334155;
+  transition: background-color 0.2s;
+}
+
+.dropdownItem:hover {
+  background-color: #f8fafc;
+}
+
+.dropdownItem:last-child {
+  color: #ef4444;
+}
+
+.dropdownItem:last-child:hover {
+  background-color: #fef2f2;
 }
 
 /* === Modal Overlay === */
@@ -348,6 +391,77 @@ input:checked + .slider:before {
     opacity: 1;
     transform: translateY(0);
   }
+}
+
+@keyframes dropdownFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-5px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* === Delete Modal === */
+.deleteModal {
+  background: white;
+  border-radius: 12px;
+  padding: 24px;
+  max-width: 400px;
+  width: 90%;
+  text-align: center;
+  animation: fadeIn 0.3s ease-in-out;
+}
+
+.deleteTitle {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: #dc2626;
+  margin-bottom: 12px;
+}
+
+.deleteMessage {
+  color: #64748b;
+  margin-bottom: 24px;
+  line-height: 1.5;
+}
+
+.deleteActions {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+}
+
+.cancelBtn {
+  background: #f1f5f9;
+  color: #475569;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 500;
+  transition: background-color 0.2s;
+}
+
+.cancelBtn:hover {
+  background: #e2e8f0;
+}
+
+.deleteBtn {
+  background: #dc2626;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 500;
+  transition: background-color 0.2s;
+}
+
+.deleteBtn:hover {
+  background: #b91c1c;
 }
 
 /* === Responsive === */
