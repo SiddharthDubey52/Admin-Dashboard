@@ -53,7 +53,7 @@ const AddTrainer = ({ onClose, onSuccess }) => {
       console.error('Error adding trainer:', error);
       try {
         const decryptedError = await decryptText(error.response?.data?.data);
-        toast.error(decryptedError?.error || 'Failed to add trainer');
+        toast.error(decryptedError?.message || 'Failed to add trainer');
       } catch {
         toast.error('Failed to add trainer');
       }
