@@ -1,5 +1,8 @@
 import React, { useState } from "react";
 import styles from "./AddTrainer.module.css";
+import { baseurl, decryptText, encryptText } from "../../../../utils/encryptdecrypt";
+import axios from "axios";
+import { toast } from "react-toastify";
 
 const AddTrainer = ({ onClose }) => {
   const [formData, setFormData] = useState({
@@ -17,7 +20,8 @@ const AddTrainer = ({ onClose }) => {
       [name]: value,
     });
   };
-
+  console.log("Form Data:", formData);
+  const token = localStorage.getItem("token");
   const handleSubmit = async(e) => {
     // e.preventDefault();
 
@@ -34,11 +38,25 @@ const AddTrainer = ({ onClose }) => {
     // alert("Trainer added successfully!");
     
     // Close the modal after successful submission
+    e.preventDefault();
+    const encryptedData = await encryptText(formData);
+    
     try {
-      
-      
+      const response = await axios.post(`${baseurl}/trainers`,{
+        body: encryptedData
+      },{
+        headers:{
+          Authorization: token
+        }
+      })
+      const decryptedData = await decryptText(response.data);
+      console.log("Decrypted Response Data:", decryptedData);
     } catch (error) {
-      
+      const decryptederror = await decryptText(error.response.data.data)
+   toast.error(decryptederror.error)
+      console.log("Error adding trainer:", decryptederror);
+
+
     }
     if (onClose) {
       onClose();

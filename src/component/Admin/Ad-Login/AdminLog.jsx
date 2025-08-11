@@ -3,6 +3,7 @@ import styles from './AdminLog.module.css'
 import { baseurl, decryptText, encryptText } from '../../../utils/encryptdecrypt'
 import axios from 'axios'
 import { useNavigate } from 'react-router-dom'
+import { toast } from 'react-toastify'
 
 const AdminLog = () => {
   const [formData, setFormData] = useState({
@@ -45,7 +46,8 @@ console.log(formData)
           navigateDash();
 
     }catch (error) {
-      console.error("Login error:", error);
+      console.log("Login error:", error);
+      toast.error(error.response.data.message);
     }
   }
 

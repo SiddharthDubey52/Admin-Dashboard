@@ -14,7 +14,7 @@ const TrainerTab = () => {
   const toggleStatus = (id) => {
     setTrainers((prev) =>
       prev.map((trainer) =>
-        trainer.id === id ? { ...trainer, status: !trainer.status } : trainer
+        trainer._id === id ? { ...trainer, status: !trainer.status } : trainer
       )
     );
   };
@@ -122,7 +122,7 @@ const TrainerTab = () => {
               />
               <div>
                 <h4>{selectedTrainer.name}</h4>
-                <p>Employee ID: {selectedTrainer.id}</p>
+                <p>Employee ID: {selectedTrainer.empId}</p>
                 <p>Email: {selectedTrainer.email}</p>
                 <p>Phone: {selectedTrainer.phone}</p>
               </div>
@@ -140,7 +140,7 @@ const TrainerTab = () => {
                 </tr>
               </thead>
               <tbody>
-                {selectedTrainer.batches.map((batch, idx) => (
+                {selectedTrainer?.batches?.map((batch, idx) => (
                   <tr key={idx}>
                     <td>{batch.code}</td>
                     <td>{batch.timing}</td>
