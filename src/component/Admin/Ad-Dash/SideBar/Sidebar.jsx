@@ -19,70 +19,59 @@ import {
   Mail, 
   ChevronDown, 
   ChevronUp, 
-  LogOut
+  LogOut,
+  Home,
+  Activity
 } from "lucide-react";
 import axios from "axios";
 import { baseurl } from "../../../../utils/encryptdecrypt";
+
 const Sidebar = ({ children }) => {
   const navigate = useNavigate();
   const location = useLocation();
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [activeContent, setActiveContent] = useState('dashboard');
+  const [isLoading, setIsLoading] = useState(false);
+  const [searchFocused, setSearchFocused] = useState(false);
 
-   const menuItems = [
+  const menuItems = [
     { path: "/dashboard", label: "Dashboard", icon: BarChart3, content: 'dashboard' },
     { path: "/trainers", label: "Trainers", icon: Users, content: 'trainers' },
-    
   ];
-   const token = localStorage.getItem('token');
-  const getPageTitle = () => {
-    const currentPath = location.pathname === "/" ? "/dashboard" : location.pathname;
-    const currentItem = menuItems.find(item => item.path === currentPath);
-    return currentItem ? currentItem.label : "Dashboard";
-  };
 
-  const getPageSubtitle = () => {
-    const currentPath = location.pathname === "/" ? "/dashboard" : location.pathname;
-    const subtitles = {
-      "/dashboard": "Welcome back, manage your business insights",
-      "/users": "Manage user accounts and permissions",
-      "/analytics": "View detailed analytics and reports",
-      "/products": "Manage your product catalog",
-      "/orders": "Track and manage customer orders",
-      "/reports": "Generate and view business reports",
-      "/finance": "Monitor financial performance",
-      "/settings": "Configure system settings",
-      "/help": "Get help and support"
-    };
-    return subtitles[currentPath] || "Admin Dashboard";
-  };
+  const token = localStorage.getItem('token');
 
   const handleMenuClick = (path, content) => {
+    setIsLoading(true);
     setActiveContent(content);
-    setSidebarOpen(false);
-    // Don't navigate away from dashboard route, just change content
+    
+    setTimeout(() => {
+      setIsLoading(false);
+      setSidebarOpen(false);
+    }, 300);
+    
     if (location.pathname !== '/dashboard') {
       navigate('/dashboard');
     }
   };
+
   const handleLogout = async() => {
-        try{
-         const response = await axios.post(`${baseurl}/logout`,{},{
-          headers : {
-            Authorization: token
-          }
-         })
-
-          console.log("Logout Response:", response.data);
-          
-          // Clear localStorage and redirect to login
-          localStorage.removeItem('token');
-          navigate('/');
-
-        } catch(error) {
-         console.error("Logout error:", error);
+    try{
+      const response = await axios.post(`${baseurl}/logout`,{},{
+        headers : {
+          Authorization: token
         }
+      })
+
+      console.log("Logout Response:", response.data);
+      localStorage.removeItem('token');
+      navigate('/');
+
+    } catch(error) {
+      console.error("Logout error:", error);
+    }
   }
+
   const toggleSidebar = () => {
     setSidebarOpen(!sidebarOpen);
   };
@@ -91,7 +80,6 @@ const Sidebar = ({ children }) => {
     setSidebarOpen(false);
   };
 
-  // Close sidebar on window resize if large screen
   useEffect(() => {
     const handleResize = () => {
       if (window.innerWidth >= 1024) {
@@ -111,57 +99,62 @@ const Sidebar = ({ children }) => {
         <div className={styles.sidebarHeader}>
           <div className={styles.logoContainer}>
             <div className={styles.logoIcon}>
-              <i className="fas fa-chart-line"></i>
+              <Activity size={20} />
             </div>
-            <span className={styles.logoText}>AdminPro</span>
+            <span className={styles.logoText}>DevOps Pro</span>
           </div>
           <button className={styles.closeButton} onClick={closeSidebar}>
-            <i className="fas fa-times"></i>
+            <X size={20} />
           </button>
         </div>
 
         {/* Navigation Menu */}
         <nav className={styles.navigation}>
-          {menuItems.slice(0, 7).map((item) => {
-            const isActive = activeContent === item.content;
-            return (
-              <button
-                key={item.path}
-                className={`${styles.menuItem} ${isActive ? styles.menuItemActive : ''}`}
-                onClick={() => handleMenuClick(item.path, item.content)}
-              >
-                <i className={`${item.icon} ${styles.menuIcon}`}></i>
-                <span>{item.label}</span>
-              </button>
-            );
-          })}
-
-          <div className={styles.divider}></div>
-
-          {menuItems.slice(7).map((item) => {
-            const isActive = activeContent === item.content;
-            return (
-              <button
-                key={item.path}
-                className={`${styles.menuItem} ${isActive ? styles.menuItemActive : ''}`}
-                onClick={() => handleMenuClick(item.path, item.content)}
-              >
-                <i className={`${item.icon} ${styles.menuIcon}`}></i>
-                <span>{item.label}</span>
-              </button>
-            );
-          })}
+          <div className={styles.menuSection}>
+            <span className={styles.sectionLabel}>Main</span>
+            {menuItems.map((item, index) => {
+              const isActive = activeContent === item.content;
+              const IconComponent = item.icon;
+              return (
+                <button
+                  key={item.path}
+                  className={`${styles.menuItem} ${isActive ? styles.menuItemActive : ''}`}
+                  onClick={() => handleMenuClick(item.path, item.content)}
+                  style={{ animationDelay: `${index * 100}ms` }}
+                >
+                  <div className={styles.menuItemContent}>
+                    <IconComponent size={20} className={styles.menuIcon} />
+                    <span className={styles.menuLabel}>{item.label}</span>
+                  </div>
+                  {isActive && <div className={styles.activeIndicator}></div>}
+                </button>
+              );
+            })}
+          </div>
         </nav>
 
         {/* User Profile Section */}
         <div className={styles.userProfile}>
+          <div className={styles.userInfo}>
+            <div className={styles.userAvatar}>
+              <img 
+                src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=150&h=150" 
+                alt="User" 
+                className={styles.avatarImage}
+              />
+              <div className={styles.statusIndicator}></div>
+            </div>
+            <div className={styles.userDetails}>
+              <span className={styles.userName}>Admin User</span>
+              <span className={styles.userRole}>Administrator</span>
+            </div>
+          </div>
           <button 
-            className={styles.userCard}
+            className={styles.logoutButton}
             onClick={handleLogout}
             type="button"
           >
-            <LogOut size={20} />
-            <span>Logout</span>
+            <LogOut size={18} />
           </button>
         </div>
       </div>
@@ -172,102 +165,88 @@ const Sidebar = ({ children }) => {
         <header className={styles.navbar}>
           <div className={styles.navbarLeft}>
             <button className={styles.menuToggle} onClick={toggleSidebar}>
-              <i className="fas fa-bars"></i>
+              <Menu size={24} />
             </button>
             <div className={styles.pageHeader}>
-              {/* <h1 className={styles.pageTitle}>{getPageTitle()}</h1> */}
               <h1 className={styles.pageTitle}>DevOps Admin</h1>
-              {/* <p className={styles.pageSubtitle}>{getPageSubtitle()}</p> */}
+              <span className={styles.pageBreadcrumb}>Dashboard / Overview</span>
             </div>
           </div>
 
           <div className={styles.navbarRight}>
             {/* Search Bar */}
-            <div className={styles.searchBar}>
-              <i className={`fas fa-search ${styles.searchIcon}`}></i>
+            <div className={`${styles.searchContainer} ${searchFocused ? styles.searchFocused : ''}`}>
+              <Search size={18} className={styles.searchIcon} />
               <input 
                 type="text" 
                 placeholder="Search anything..." 
                 className={styles.searchInput}
+                onFocus={() => setSearchFocused(true)}
+                onBlur={() => setSearchFocused(false)}
               />
+              <div className={styles.searchShortcut}>⌘K</div>
             </div>
 
             {/* Notifications */}
-            {/* <button className={styles.notificationButton}>
-              <i className="fas fa-bell"></i>
+            <button className={styles.notificationButton}>
+              <Bell size={20} />
               <span className={styles.notificationBadge}>3</span>
-            </button> */}
-
-            {/* Messages */}
-            {/* <button className={styles.notificationButton}>
-              <i className="fas fa-envelope"></i>
-              <span className={`${styles.notificationBadge} ${styles.messageBadge}`}>2</span>
-            </button> */}
+            </button>
 
             {/* Profile Dropdown */}
             <button className={styles.profileButton}>
               <img 
                 src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=150&h=150" 
-                alt="Admin profile" 
+                alt="Profile" 
                 className={styles.profileAvatar}
               />
-              <i className={`fas fa-chevron-down ${styles.profileChevron}`}></i>
+              <ChevronDown size={16} className={styles.profileChevron} />
             </button>
           </div>
         </header>
 
         {/* Content Area */}
         <main className={styles.contentArea}>
-          {activeContent === 'trainers' && <TrainerTab />}
-          {activeContent === 'dashboard' && (
-            <div>
-              <h2>Dashboard Content</h2>
-              <p>Welcome to the admin dashboard!</p>
+          {isLoading && (
+            <div className={styles.loadingOverlay}>
+              <div className={styles.loadingSpinner}>
+                <div className={styles.spinner}></div>
+                <span className={styles.loadingText}>Loading...</span>
+              </div>
             </div>
           )}
-          {activeContent === 'analytics' && (
-            <div>
-              <h2>Analytics</h2>
-              <p>Analytics content will be here</p>
-            </div>
-          )}
-          {activeContent === 'products' && (
-            <div>
-              <h2>Products</h2>
-              <p>Products content will be here</p>
-            </div>
-          )}
-          {activeContent === 'orders' && (
-            <div>
-              <h2>Orders</h2>
-              <p>Orders content will be here</p>
-            </div>
-          )}
-          {activeContent === 'reports' && (
-            <div>
-              <h2>Reports</h2>
-              <p>Reports content will be here</p>
-            </div>
-          )}
-          {activeContent === 'finance' && (
-            <div>
-              <h2>Finance</h2>
-              <p>Finance content will be here</p>
-            </div>
-          )}
-          {activeContent === 'settings' && (
-            <div>
-              <h2>Settings</h2>
-              <p>Settings content will be here</p>
-            </div>
-          )}
-          {activeContent === 'help' && (
-            <div>
-              <h2>Help & Support</h2>
-              <p>Help content will be here</p>
-            </div>
-          )}
-          {children}
+          
+          <div className={`${styles.contentWrapper} ${isLoading ? styles.contentLoading : ''}`}>
+            {activeContent === 'trainers' && <TrainerTab />}
+            {activeContent === 'dashboard' && (
+              <div className={styles.dashboardContent}>
+                <div className={styles.welcomeCard}>
+                  <div className={styles.cardHeader}>
+                    <Home size={24} className={styles.cardIcon} />
+                    <div>
+                      <h2 className={styles.cardTitle}>Welcome Back!</h2>
+                      <p className={styles.cardSubtitle}>Here's what's happening with your projects today.</p>
+                    </div>
+                  </div>
+                  <div className={styles.statsGrid}>
+                    <div className={styles.statCard}>
+                      <div className={styles.statValue}>24</div>
+                      <div className={styles.statLabel}>Active Projects</div>
+                    </div>
+                    <div className={styles.statCard}>
+                      <div className={styles.statValue}>156</div>
+                      <div className={styles.statLabel}>Total Users</div>
+                    </div>
+                    <div className={styles.statCard}>
+                      <div className={styles.statValue}>98%</div>
+                      <div className={styles.statLabel}>Uptime</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            )}
+            {children}
+          </div>
         </main>
       </div>
 
