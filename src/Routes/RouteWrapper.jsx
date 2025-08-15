@@ -7,22 +7,18 @@ import AdminLog from "../component/Admin/Ad-Login/AdminLog";
 // Future components (uncomment when ready)
 import Home from "../pages/Home";
 import About from "../pages/About";
-import Dashboard from "../pages/Dashboard";
 import TrainerLogin from "../component/Trainers/TrainerLogin/TrainerLogin";
 import AddTrainer from "../component/Admin/Ad-Dash/pages/AddTrainer";
 import Sidebar from "../component/Admin/Ad-Dash/SideBar/Sidebar";
-// import TrainerDash from "../component/Trainers/TrainerDash/TrainerDash";
 
 import TrainerTab from "../component/Admin/Ad-Dash/pages/TrainerTab";
+import BatchTab from "../component/Trainers/Trainer-pages/BatchTab";
+import Dashboard from "../component/Trainers/Trainer-Dashboard/Dashboard";
 
-// import LandingNavbar from "../components/landing-page/Navbar/LandingNavbar";
-// import DashboardLayout from "../components/User_dashboard/DashboardLayout";
-// import Footer from "../components/landing-page/Footer/Footer";
 
 const RouteWrapper = () => {
   const location = useLocation();
 
-  // Define special routes that don't need navbar/footer
   const isLoginPage = ["/admin", "/trainer", "/login"].includes(location.pathname);
   
   // Define dashboard routes (for future use)
@@ -41,51 +37,33 @@ const RouteWrapper = () => {
 
   return (
     <>
-      {/* Show Navbar only on non-login, non-dashboard pages */}
-      {/* {!isLoginPage && !isDashboardPage && <LandingNavbar />} */}
-
+    
       <Routes>
         {/* Landing/Public Routes */}
-        <Route path="/" element={<AdminLog />} />
+        <Route path="/zshadmin" element={<AdminLog />} />
         <Route path="/home" element={<Home />} />
         <Route path="/about" element={<About />} />
 
-        {/* Authentication Routes */}
+        
         <Route path="/admin" element={<AdminLog />} />
         <Route path="/login" element={<AdminLog />} />
         <Route path="/trainer" element={<TrainerLogin />} />
         <Route path="/addtrainer" element={<AddTrainer/>}/>
-        {/* <Route path="/trainerdash" element={<TrainerDash/>}/> */}
+        
         <Route path="/TrainerTab" element={<TrainerTab />} />
-        {/* Protected Dashboard Routes */}
-        <Route path="/dashboard" element={<Sidebar />} />
+     
+        <Route path="/Ad-Dashboard" element={<Sidebar />} />
 
-        {/* Future Dashboard Routes under layout */}
-        {/* <Route element={<DashboardLayout />}>
-          <Route path="/dashboard" element={<Dashboard />} />
-          <Route path="/organizations" element={<Organizations />} />
-          <Route path="/teams" element={<Teams />} />
-          <Route path="/members" element={<Members />} />
-          <Route path="/roles" element={<Roles />} />
-          <Route path="/groups" element={<Groups />} />
-          <Route path="/projects" element={<Projects />} />
-          <Route path="/profile" element={<Profile />} />
-          <Route path="/settings" element={<Settings />} />
-        </Route> */}
+        
 
-        {/* Future API and Other Routes */}
-        {/* <Route path="/api-explorer" element={<ApiExploral />} />
-        <Route path="/pricing" element={<PricingPage />} />
-        <Route path="/blog" element={<Blog />} />
-        <Route path="/documentation" element={<Documentation />} />
-        <Route path="/enterprise" element={<Enterprise />} /> */}
+      
 
-        {/* Fallback - redirect to admin login */}
-        <Route path="*" element={<AdminLog />} />
+
+        <Route path="*" element={<TrainerLogin/>} />
+        <Route path="/Tra-Dashboard" element={<Dashboard />} />
+        <Route path="/Batches" element={<BatchTab />} />
       </Routes>
 
-      {/* Show Footer only on non-login, non-dashboard pages */}
-      {/* {!isLoginPage && !isDashboardPage && <Footer />} */}
     </>
   );
 };

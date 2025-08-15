@@ -1,107 +1,111 @@
-import React, { useState } from 'react';
+import React, { useState } from 'react'
+import styles from './TrainerLogin.module.css'
+import { baseurl, decryptText, encryptText } from '../../../utils/encryptdecrypt'
+import axios from 'axios'
+import { useNavigate } from 'react-router-dom'
+import toast from 'react-hot-toast'
 
 const TrainerLogin = () => {
   const [formData, setFormData] = useState({
-    username: '',
+    empId: '',
     password: ''
-  });
-
+  })
+  const [isLoading, setIsLoading] = useState(false)
+  const [message, setMessage] = useState('')
+  const [messageType, setMessageType] = useState('')
+  const navigate = useNavigate();
+   const navigateDash = () => {
+         navigate('/Tra-Dashboard');
+   }
   const handleInputChange = (e) => {
-    const { name, value } = e.target;
+    const { name, value } = e.target
     setFormData(prev => ({
       ...prev,
       [name]: value
-    }));
-  };
+    }))
+    // Clear message when user starts typing
+    if (message) {
+      setMessage('')
+      setMessageType('')
+    }
+  }
+console.log(formData)
+  const handleSubmit = async (e) => {
+    e.preventDefault()
+    const encryptdata = await encryptText(formData);
+    console.log("Encrypted Data:", encryptdata);
+    try{
+          const response = await axios.post(`${baseurl}/trainer/login`,{
+            body: encryptdata
+          })
+          const decryptResponse = await decryptText(response.data.data)
+          // console.log("Response:", response.data.data);
+          console.log("Decrypted Response:", decryptResponse);
+          const token = decryptResponse.token;
+          localStorage.setItem('token', token);
+          navigateDash();
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    console.log('Trainer login attempt:', formData);
-    // Add trainer authentication logic here
-  };
+    }catch (error) {
+      console.log("Login error:", error);
+      toast.error(error.response.data.message);
+    }
+  }
 
   return (
-    <div style={{
-      minHeight: '100vh',
-      display: 'flex',
-      alignItems: 'center',
-      justifyContent: 'center',
-      background: 'linear-gradient(135deg, #22c55e 0%, #16a34a 100%)',
-      padding: '20px'
-    }}>
-      <div style={{
-        background: 'white',
-        padding: '40px',
-        borderRadius: '12px',
-        boxShadow: '0 20px 25px -5px rgba(0, 0, 0, 0.1)',
-        width: '100%',
-        maxWidth: '400px'
-      }}>
-        <h2 style={{ textAlign: 'center', marginBottom: '30px', color: '#1f2937' }}>
-          Trainer Login
-        </h2>
+    <div className={styles.loginContainer}>
+      <div className={styles.loginBox}>
+        <h2 className={styles.title}> Login</h2>
+        
         <form onSubmit={handleSubmit}>
-          <div style={{ marginBottom: '20px' }}>
-            <label style={{ display: 'block', marginBottom: '5px', color: '#374151' }}>
-              Username
+          <div className={styles.formGroup}>
+            <label htmlFor="empId" className={styles.label}>
+              empId
             </label>
             <input
               type="text"
-              name="username"
-              value={formData.username}
+              id="empId"
+              name="empId"
+              value={formData.empId}
               onChange={handleInputChange}
-              style={{
-                width: '100%',
-                padding: '12px',
-                border: '1px solid #d1d5db',
-                borderRadius: '6px',
-                fontSize: '16px'
-              }}
-              required
+              placeholder="Enter your empId"
+              className={styles.input}
+              disabled={isLoading}
             />
           </div>
-          <div style={{ marginBottom: '20px' }}>
-            <label style={{ display: 'block', marginBottom: '5px', color: '#374151' }}>
+
+          <div className={styles.formGroup}>
+            <label htmlFor="password" className={styles.label}>
               Password
             </label>
             <input
               type="password"
+              id="password"
               name="password"
               value={formData.password}
               onChange={handleInputChange}
-              style={{
-                width: '100%',
-                padding: '12px',
-                border: '1px solid #d1d5db',
-                borderRadius: '6px',
-                fontSize: '16px'
-              }}
-              required
+              placeholder="Enter your password"
+              className={styles.input}
+              disabled={isLoading}
             />
           </div>
+
           <button
             type="submit"
-            style={{
-              width: '100%',
-              background: '#22c55e',
-              color: 'white',
-              border: 'none',
-              padding: '12px',
-              borderRadius: '6px',
-              fontSize: '16px',
-              fontWeight: '600',
-              cursor: 'pointer'
-            }}
+            className={styles.loginButton}
+            disabled={isLoading}
           >
-            Login as Trainer
+            {isLoading ? 'Logging in...' : 'Login'}
           </button>
+
+          {message && (
+            <div className={messageType === 'error' ? styles.errorMessage : styles.successMessage}>
+              {message}
+            </div>
+          )}
         </form>
-        <p style={{ textAlign: 'center', marginTop: '20px', color: '#6b7280' }}>
-          Coming Soon - Trainer Authentication
-        </p>
       </div>
     </div>
-  );
-};
+  )
+}
 
 export default TrainerLogin;
