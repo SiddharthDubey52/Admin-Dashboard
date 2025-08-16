@@ -52,6 +52,7 @@ const RouteWrapper = () => {
         
         <Route path="/TrainerTab" element={<TrainerTab />} />
      
+        <Route path="/dashboard" element={<Sidebar />} />
         <Route path="/Ad-Dashboard" element={<Sidebar />} />
 
         

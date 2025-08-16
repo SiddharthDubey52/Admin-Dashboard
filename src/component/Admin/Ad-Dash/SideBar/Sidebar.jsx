@@ -36,14 +36,16 @@ const Sidebar = ({ children }) => {
 
   const menuItems = [
     { path: "/dashboard", label: "Dashboard", icon: BarChart3, content: 'dashboard' },
-    { path: "/trainers", label: "Trainers", icon: Users, content: 'trainers' },
+    { path: "/TrainerTab", label: "Trainers", icon: Users, content: 'trainers' },
   ];
 
   const token = localStorage.getItem('token');
 
   const handleMenuClick = (path, content) => {
+    console.log('Menu clicked:', { path, content });
     setIsLoading(true);
     setActiveContent(content);
+    console.log('Active content set to:', content);
     
     setTimeout(() => {
       setIsLoading(false);
@@ -90,6 +92,14 @@ const Sidebar = ({ children }) => {
     window.addEventListener('resize', handleResize);
     return () => window.removeEventListener('resize', handleResize);
   }, []);
+
+  // Initialize active content based on current route or default to dashboard
+  useEffect(() => {
+    // If we're on the dashboard route, show dashboard content by default
+    if (location.pathname === '/dashboard' && !activeContent) {
+      setActiveContent('dashboard');
+    }
+  }, [location.pathname, activeContent]);
 
   return (
     <div className={styles.adminLayout}>
@@ -169,7 +179,7 @@ const Sidebar = ({ children }) => {
             </button>
             <div className={styles.pageHeader}>
               <h1 className={styles.pageTitle}>DevOps Admin</h1>
-              <span className={styles.pageBreadcrumb}>Dashboard / Overview</span>
+              <span className={styles.pageBreadcrumb}>Dashboard / Overview - Active: {activeContent}</span>
             </div>
           </div>
 
@@ -243,6 +253,11 @@ const Sidebar = ({ children }) => {
                     </div>
                   </div>
                 </div>
+              </div>
+            )}
+            {!activeContent && (
+              <div style={{padding: '20px', textAlign: 'center'}}>
+                <p>No content selected. Current activeContent: "{activeContent}"</p>
               </div>
             )}
             {children}

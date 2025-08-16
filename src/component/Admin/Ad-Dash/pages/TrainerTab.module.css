@@ -1,153 +1,96 @@
-/* .container {
-  padding: 20px;
-}
-
-.card {
-  background: #fff;
-  padding: 16px;
-  border-radius: 12px;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.05);
-}
-
-.subHeader {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.subTitle {
-  font-size: 1.2rem;
-  font-weight: 600;
-}
-
-.createBtn {
-  background: #2563eb;
-  color: #fff;
-  padding: 8px 16px;
-  border: none;
-  border-radius: 8px;
-  font-size: 0.9rem;
-  cursor: pointer;
-}
-
-.tableWrapper {
-  margin-top: 16px;
-  overflow-x: auto;
-}
-
-.table {
-  width: 100%;
-  border-collapse: collapse;
-}
-
-.table th,
-.table td {
-  padding: 12px;
-  border-bottom: 1px solid #e5e7eb;
-  text-align: left;
-}
-
-.actionsCol {
-  text-align: center;
-}
-
-.actions {
-  text-align: center;
-}
-
-.iconButton {
-  color: #2563eb;
-  cursor: pointer;
-}
-
-/* Toggle Switch */
-/* .switch {
-  position: relative;
-  display: inline-block;
-  width: 42px;
-  height: 22px;
-}
-
-.switch input {
-  display: none;
-}
-
-.slider {
-  position: absolute;
-  cursor: pointer;
-  top: 0; left: 0; right: 0; bottom: 0;
-  background-color: #ccc;
-  transition: .4s;
-  border-radius: 22px;
-}
-
-.slider:before {
-  position: absolute;
-  content: "";
-  height: 18px;
-  width: 18px;
-  left: 2px;
-  bottom: 2px;
-  background-color: white;
-  transition: .4s;
-  border-radius: 50%;
-}
-
-input:checked + .slider {
-  background-color: #22c55e;
-}
-
-input:checked + .slider:before {
-  transform: translateX(20px);
-} */
-
-/* Modal Styles */
-/* 
-/* === Global Container === */
+/* Container & Layout */
 .container {
-  padding: 20px;
-  background-color: #f8fafc;
-  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  padding: 24px;
+  background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+  min-height: 100vh;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+  overflow: visible;
 }
 
 .card {
-  background: #fff;
-  border-radius: 10px;
-  padding: 20px;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(20px);
+  border-radius: 24px;
+  padding: 32px;
+  box-shadow: 
+    0 4px 6px -1px rgba(0, 0, 0, 0.1),
+    0 2px 4px -1px rgba(0, 0, 0, 0.06),
+    0 20px 25px -5px rgba(0, 0, 0, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
 }
 
-/* === Header === */
-.subHeader {
+/* Header */
+.header {
   display: flex;
   justify-content: space-between;
-  align-items: center;
-  margin-bottom: 15px;
+  align-items: flex-start;
+  margin-bottom: 32px;
+  gap: 24px;
 }
 
-.subTitle {
-  font-size: 1.5rem;
-  font-weight: 600;
-  color: #1e293b;
+.headerContent {
+  flex: 1;
+}
+
+.title {
+  font-size: 2rem;
+  font-weight: 700;
+  color: #0f172a;
+  margin: 0 0 8px 0;
+  letter-spacing: -0.025em;
+  line-height: 1.2;
+}
+
+.subtitle {
+  font-size: 1rem;
+  color: #64748b;
+  margin: 0;
+  line-height: 1.5;
 }
 
 .createBtn {
-  background: #2563eb;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
   color: white;
-  padding: 8px 16px;
+  padding: 12px 24px;
   border: none;
-  border-radius: 6px;
-  font-size: 0.9rem;
-  font-weight: 500;
+  border-radius: 16px;
+  font-size: 0.95rem;
+  font-weight: 600;
   cursor: pointer;
-  transition: background 0.3s;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 4px 14px 0 rgba(59, 130, 246, 0.39);
+  position: relative;
+  overflow: hidden;
 }
 
-.createBtn:hover {
-  background: #1d4ed8;
+.createBtn:before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+  transition: left 0.5s;
 }
 
-/* === Table === */
+.createBtn:hover:before {
+  left: 100%;
+}
+
+/* Table */
+.tableContainer {
+  background: rgba(255, 255, 255, 0.6);
+  border-radius: 20px;
+  padding: 0;
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  backdrop-filter: blur(10px);
+}
+
 .tableWrapper {
   overflow-x: auto;
 }
@@ -155,34 +98,106 @@ input:checked + .slider:before {
 .table {
   width: 100%;
   border-collapse: collapse;
-  min-width: 600px;
+  margin: 0;
 }
 
-.table th,
-.table td {
-  padding: 12px 15px;
-  text-align: left;
+.table thead {
+  background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
 }
 
 .table th {
-  background-color: #f1f5f9;
-  color: #475569;
-  font-size: 0.9rem;
+  padding: 20px 24px;
   font-weight: 600;
+  font-size: 0.875rem;
+  color: #475569;
+  text-align: left;
+  letter-spacing: 0.025em;
+  border-bottom: 2px solid #e2e8f0;
+  text-transform: uppercase;
 }
 
 .table td {
-  border-bottom: 1px solid #e2e8f0;
-  font-size: 0.9rem;
+  padding: 20px 24px;
+  border-bottom: 1px solid rgba(226, 232, 240, 0.6);
+  font-size: 0.95rem;
   color: #334155;
+  vertical-align: middle;
 }
 
-/* === Status Toggle === */
+.tableRow {
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  cursor: pointer;
+}
+
+.tableRow:hover {
+  transform: translateX(4px);
+}
+
+.tableRow:last-child td {
+  border-bottom: none;
+}
+
+/* Trainer Info Cell */
+.trainerCell {
+  min-width: 280px;
+}
+
+.trainerInfo {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.avatar {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 3px solid rgba(59, 130, 246, 0.1);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.trainerName {
+  font-weight: 600;
+  color: #1e293b;
+  font-size: 1rem;
+  line-height: 1.4;
+  margin-bottom: 2px;
+}
+
+.trainerEmail {
+  color: #64748b;
+  font-size: 0.875rem;
+  line-height: 1.4;
+}
+
+.empId {
+  font-weight: 500;
+  color: #475569;
+  font-family: 'SF Mono', 'Monaco', monospace;
+  background: rgba(148, 163, 184, 0.1);
+  padding: 4px 8px;
+  border-radius: 8px;
+  display: inline-block;
+}
+
+.roleTag {
+  background: linear-gradient(135deg, #dbeafe 0%, #bfdbfe 100%);
+  color: #1e40af;
+  padding: 6px 12px;
+  border-radius: 12px;
+  font-size: 0.825rem;
+  font-weight: 600;
+  border: 1px solid rgba(59, 130, 246, 0.2);
+}
+
+/* Status Toggle */
 .switch {
   position: relative;
   display: inline-block;
-  width: 40px;
-  height: 22px;
+  width: 52px;
+  height: 28px;
+  cursor: pointer;
 }
 
 .switch input {
@@ -198,169 +213,1759 @@ input:checked + .slider:before {
   left: 0;
   right: 0;
   bottom: 0;
-  background-color: #d1d5db;
-  transition: 0.4s;
-  border-radius: 22px;
+  background: linear-gradient(135deg, #e2e8f0 0%, #cbd5e1 100%);
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  border-radius: 28px;
+  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 .slider:before {
   position: absolute;
   content: "";
-  height: 16px;
-  width: 16px;
+  height: 20px;
+  width: 20px;
   left: 4px;
-  bottom: 3px;
-  background-color: white;
-  transition: 0.4s;
+  bottom: 4px;
+  background: white;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
   border-radius: 50%;
+  box-shadow: 
+    0 2px 8px rgba(0, 0, 0, 0.15),
+    0 1px 3px rgba(0, 0, 0, 0.2);
 }
 
 .switch input:checked + .slider {
-  background-color: #22c55e;
+  background: linear-gradient(135deg, #22c55e 0%, #16a34a 100%);
+  box-shadow: 0 0 0 2px rgba(34, 197, 94, 0.2);
 }
 
 .switch input:checked + .slider:before {
-  transform: translateX(18px);
+  transform: translateX(24px);
 }
 
-/* === Actions Column === */
-.actionsCol {
-  width: 80px;
-}
-
+/* Actions */
 .actions {
   display: flex;
-  justify-content: flex-start;
   align-items: center;
-  gap: 10px;
+  gap: 8px;
+  justify-content: center;
 }
 
-.iconButton {
-  color: #2563eb;
+.actionsHeader {
+  text-align: center;
+}
+
+.actionBtn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  background: rgba(255, 255, 255, 0.8);
+  border: 1px solid rgba(226, 232, 240, 0.8);
+  border-radius: 10px;
+  color: #475569;
   cursor: pointer;
-  transition: transform 0.2s, color 0.2s;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  backdrop-filter: blur(10px);
 }
 
-.iconButton:hover {
-  transform: scale(1.1);
-  color: #1d4ed8;
+.actionBtn:hover {
+  background: rgba(59, 130, 246, 0.1);
+  border-color: rgba(59, 130, 246, 0.3);
+  color: #3b82f6;
+  box-shadow: 0 4px 12px rgba(59, 130, 246, 0.15);
 }
 
-/* === Modal Overlay === */
+/* Dropdown */
+.dropdownContainer {
+  position: relative;
+}
+
+.dropdown {
+  position: absolute;
+  top: 100%;
+  right: 0;
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(226, 232, 240, 0.8);
+  border-radius: 16px;
+  box-shadow: 
+    0 10px 15px -3px rgba(0, 0, 0, 0.1),
+    0 4px 6px -2px rgba(0, 0, 0, 0.05),
+    0 20px 25px -5px rgba(0, 0, 0, 0.1);
+  z-index: 100;
+  min-width: 160px;
+  padding: 8px;
+  margin-top: 8px;
+}
+
+.dropdownItem {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 16px;
+  border-radius: 12px;
+  cursor: pointer;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: #374151;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  border: none;
+  background: none;
+  width: 100%;
+  text-align: left;
+}
+
+.dropdownItem:hover {
+  background: rgba(59, 130, 246, 0.08);
+  color: #1e40af;
+}
+
+.deleteItem {
+  color: #dc2626 !important;
+}
+
+.deleteItem:hover {
+  background: rgba(239, 68, 68, 0.08) !important;
+  color: #dc2626 !important;
+}
+
+/* Modal Overlay */
 .modalOverlay {
   position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background-color: rgba(15, 23, 42, 0.6);
+  inset: 0;
+  background: rgba(15, 23, 42, 0.6);
+  backdrop-filter: blur(8px);
   display: flex;
   justify-content: center;
   align-items: center;
   z-index: 1000;
+  padding: 24px;
 }
 
+/* Modal */
 .modal {
-  background: #ffffff;
-  border-radius: 12px;
-  padding: 20px;
-  width: 90%;
-  max-width: 532px;
-  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+  background: rgba(255, 255, 255, 0.98);
+  backdrop-filter: blur(20px);
+  border-radius: 24px;
+  width: 100%;
+  max-width: 640px;
+  max-height: 90vh;
+  overflow-y: auto;
+  box-shadow: 
+    0 25px 50px -12px rgba(0, 0, 0, 0.25),
+    0 0 0 1px rgba(255, 255, 255, 0.1);
   position: relative;
-  animation: fadeIn 0.3s ease-in-out;
+  border: 1px solid rgba(255, 255, 255, 0.2);
 }
 
 .closeBtn {
-  background: transparent;
-  border: none;
-  cursor: pointer;
   position: absolute;
-  top: 12px;
-  right: 12px;
+  top: 20px;
+  right: 20px;
+  background: rgba(255, 255, 255, 0.9);
+  border: 1px solid rgba(226, 232, 240, 0.8);
+  border-radius: 12px;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
   color: #64748b;
-  transition: color 0.3s;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  z-index: 10;
 }
 
 .closeBtn:hover {
+  background: rgba(239, 68, 68, 0.1);
+  border-color: rgba(239, 68, 68, 0.3);
   color: #ef4444;
 }
 
+.modalContent {
+  padding: 32px;
+}
+
 .modalTitle {
-  font-size: 1.3rem;
-  font-weight: 600;
-  color: #1e293b;
-  margin-bottom: 15px;
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #0f172a;
+  margin: 0 0 24px 0;
+  line-height: 1.3;
 }
 
-/* === Trainer Info === */
-.trainerInfo {
+/* Profile Section */
+.profileSection {
   display: flex;
-  gap: 15px;
-  margin-bottom: 20px;
+  gap: 24px;
+  margin-bottom: 32px;
+  padding: 24px;
+  background: rgba(248, 250, 252, 0.8);
+  border-radius: 20px;
+  border: 1px solid rgba(226, 232, 240, 0.5);
 }
 
-.profileImg {
-  width: 80px;
-  height: 80px;
-  border-radius: 50%;
+.profileImage {
+  width: 100px;
+  height: 100px;
+  border-radius: 20px;
   object-fit: cover;
+  border: 3px solid rgba(59, 130, 246, 0.1);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
 }
 
-.batchTitle {
+.profileDetails {
+  flex: 1;
+}
+
+.profileName {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #0f172a;
+  margin: 0 0 4px 0;
+}
+
+.profileRole {
+  color: #3b82f6;
+  font-weight: 600;
+  font-size: 0.95rem;
+  margin: 0 0 16px 0;
+}
+
+.contactInfo {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.contactItem {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  color: #64748b;
+  font-size: 0.9rem;
+}
+
+.contactItem svg {
+  color: #94a3b8;
+}
+
+/* Batches Section */
+.batchesSection {
+  margin-top: 24px;
+}
+
+.sectionTitle {
+  display: flex;
+  align-items: center;
+  gap: 12px;
   font-size: 1.1rem;
   font-weight: 600;
   color: #334155;
-  margin-bottom: 10px;
+  margin: 0 0 20px 0;
 }
 
-/* === Batch Table === */
-.batchTable {
+.batchGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 16px;
+}
+
+.batchCard {
+  background: rgba(255, 255, 255, 0.9);
+  border: 1px solid rgba(226, 232, 240, 0.8);
+  border-radius: 16px;
+  padding: 20px;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.batchHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.batchCode {
+  font-weight: 700;
+  color: #0f172a;
+  margin: 0;
+  font-size: 1rem;
+}
+
+.studentCount {
+  background: rgba(59, 130, 246, 0.1);
+  color: #1e40af;
+  padding: 4px 8px;
+  border-radius: 8px;
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+
+.batchInfo {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.batchTiming {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #64748b;
+  font-size: 0.875rem;
+  font-weight: 500;
+}
+
+.batchDuration {
+  color: #94a3b8;
+  font-size: 0.8rem;
+}
+
+/* Delete Modal */
+.deleteModal {
+  background: rgba(255, 255, 255, 0.98);
+  backdrop-filter: blur(20px);
+  border-radius: 24px;
+  padding: 32px;
+  max-width: 420px;
   width: 100%;
-  border-collapse: collapse;
+  text-align: center;
+  box-shadow: 
+    0 25px 50px -12px rgba(0, 0, 0, 0.25),
+    0 0 0 1px rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
 }
 
-.batchTable th,
-.batchTable td {
-  padding: 10px;
+.deleteIcon {
+  width: 60px;
+  height: 60px;
+  background: rgba(239, 68, 68, 0.1);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #ef4444;
+  margin: 0 auto 20px auto;
+}
+
+.deleteTitle {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #0f172a;
+  margin: 0 0 12px 0;
+}
+
+.deleteMessage {
+  color: #64748b;
+  line-height: 1.6;
+  margin: 0 0 24px 0;
+}
+
+.deleteActions {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+}
+
+.cancelBtn {
+  background: rgba(248, 250, 252, 0.8);
+  color: #475569;
+  border: 1px solid rgba(226, 232, 240, 0.8);
+  padding: 12px 24px;
+  border-radius: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.cancelBtn:hover {
+  background: rgba(241, 245, 249, 0.8);
+}
+
+.deleteBtn {
+  background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+  color: white;
+  border: none;
+  padding: 12px 24px;
+  border-radius: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 4px 14px 0 rgba(239, 68, 68, 0.39);
+}
+
+.deleteBtn:hover {
+  box-shadow: 0 6px 20px 0 rgba(239, 68, 68, 0.5);
+}
+
+.deleteBtn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* Edit Trainer Styles */
+.editContainer {
+  padding: 32px;
+  max-width: 600px;
+  width: 100%;
+}
+
+.editHeader {
+  text-align: center;
+  margin-bottom: 32px;
+}
+
+.editTitle {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #0f172a;
+  margin: 0 0 8px 0;
+  line-height: 1.3;
+}
+
+.editSubtitle {
+  color: #64748b;
+  font-size: 0.95rem;
+  margin: 0;
+  line-height: 1.5;
+}
+
+.editForm {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.editRow {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+}
+
+.editInputGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.editLabel {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 600;
+  color: #374151;
+  font-size: 0.875rem;
+  letter-spacing: 0.025em;
+}
+
+.editInput,
+.editSelect {
+  padding: 14px 16px;
+  border: 2px solid #e5e7eb;
+  border-radius: 12px;
+  font-size: 0.95rem;
+  color: #374151;
+  background: rgba(255, 255, 255, 0.9);
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  backdrop-filter: blur(10px);
+}
+
+.editInput:focus,
+.editSelect:focus {
+  outline: none;
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+  background: rgba(255, 255, 255, 1);
+}
+
+.editInput::placeholder {
+  color: #9ca3af;
+}
+
+.editSelect {
+  cursor: pointer;
+}
+
+.editActions {
+  display: flex;
+  gap: 16px;
+  justify-content: flex-end;
+  padding-top: 24px;
+  border-top: 1px solid #e5e7eb;
+}
+
+.editCancelBtn {
+  background: rgba(248, 250, 252, 0.8);
+  color: #475569;
+  border: 1px solid #d1d5db;
+  padding: 14px 28px;
+  border-radius: 16px;
+  font-weight: 600;
+  font-size: 0.95rem;
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.editCancelBtn:hover:not(:disabled) {
+  background: rgba(241, 245, 249, 0.9);
+  border-color: #9ca3af;
+}
+
+.editCancelBtn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.editSubmitBtn {
+  background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
+  color: white;
+  border: none;
+  padding: 14px 28px;
+  border-radius: 16px;
+  font-weight: 600;
+  font-size: 0.95rem;
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 4px 14px 0 rgba(59, 130, 246, 0.39);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 140px;
+}
+
+.editSubmitBtn:hover:not(:disabled) {
+  box-shadow: 0 6px 20px 0 rgba(59, 130, 246, 0.5);
+  transform: translateY(-1px);
+}
+
+.editSubmitBtn:disabled {
+  opacity: 0.8;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.editSpinner {
+  width: 20px;
+  height: 20px;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-top: 2px solid white;
+  border-radius: 50%;
+}
+
+/* Mobile Card View */
+.mobileCardView {
+  display: none;
+  flex-direction: column;
+  gap: 12px;
+  overflow: visible;
+  position: relative;
+}
+
+.mobileCard {
+  background: rgba(255, 255, 255, 0.9);
+  border: 1px solid rgba(226, 232, 240, 0.8);
+  border-radius: 12px;
+  padding: 16px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  overflow: visible;
+}
+
+.mobileCardHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 16px;
+}
+
+.mobileTrainerInfo {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex: 1;
+}
+
+.mobileAvatar {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid rgba(59, 130, 246, 0.1);
+}
+
+.mobileTrainerName {
+  font-weight: 600;
+  color: #1e293b;
+  font-size: 1rem;
+  line-height: 1.4;
+  margin-bottom: 2px;
+}
+
+.mobileTrainerEmail {
+  color: #64748b;
+  font-size: 0.875rem;
+  line-height: 1.4;
+}
+
+.mobileActions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  position: relative;
+  z-index: 10;
+}
+
+.mobileActionBtn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  background: rgba(255, 255, 255, 0.9);
+  border: 1px solid rgba(226, 232, 240, 0.8);
+  border-radius: 8px;
+  color: #475569;
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.mobileActionBtn:hover {
+  background: rgba(59, 130, 246, 0.1);
+  border-color: rgba(59, 130, 246, 0.3);
+  color: #3b82f6;
+}
+
+.mobileDropdownContainer {
+  position: relative;
+  z-index: 200;
+}
+
+.mobileDropdown {
+  position: absolute;
+  top: calc(100% + 4px);
+  right: 0;
+  background: rgba(255, 255, 255, 0.98);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(226, 232, 240, 0.8);
+  border-radius: 8px;
+  box-shadow: 
+    0 8px 25px rgba(0, 0, 0, 0.15),
+    0 4px 6px rgba(0, 0, 0, 0.1);
+  z-index: 1000;
+  min-width: 140px;
+  padding: 6px;
+  margin-top: 0;
+  animation: mobileDropdownFadeIn 0.2s ease-out forwards;
+}
+
+.mobileDropdownItem {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 12px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: #374151;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  border: none;
+  background: none;
+  width: 100%;
   text-align: left;
 }
 
-.batchTable th {
-  background-color: #f8fafc;
-  font-size: 0.85rem;
-  color: #475569;
+.mobileDropdownItem:hover {
+  background: rgba(59, 130, 246, 0.08);
+  color: #1e40af;
 }
 
-.batchTable td {
-  border-bottom: 1px solid #e2e8f0;
-  font-size: 0.85rem;
-  color: #334155;
+.deleteMobileItem {
+  color: #dc2626 !important;
 }
 
-/* === Animations === */
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-    transform: translateY(-10px);
+.deleteMobileItem:hover {
+  background: rgba(239, 68, 68, 0.08) !important;
+  color: #dc2626 !important;
+}
+
+.mobileCardContent {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.mobileInfoRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.mobileLabel {
+  font-weight: 600;
+  color: #64748b;
+  font-size: 0.875rem;
+}
+
+.mobileValue {
+  color: #1e293b;
+  font-size: 0.875rem;
+  font-weight: 500;
+}
+
+.mobileRoleTag {
+  background: linear-gradient(135deg, #dbeafe 0%, #bfdbfe 100%);
+  color: #1e40af;
+  padding: 4px 8px;
+  border-radius: 6px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  border: 1px solid rgba(59, 130, 246, 0.2);
+}
+
+.mobileSwitch {
+  position: relative;
+  display: inline-block;
+  width: 44px;
+  height: 24px;
+  cursor: pointer;
+}
+
+.mobileSwitch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.mobileSlider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(135deg, #e2e8f0 0%, #cbd5e1 100%);
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  border-radius: 24px;
+  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.mobileSlider:before {
+  position: absolute;
+  content: "";
+  height: 16px;
+  width: 16px;
+  left: 4px;
+  bottom: 4px;
+  background: white;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  border-radius: 50%;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.mobileSwitch input:checked + .mobileSlider {
+  background: linear-gradient(135deg, #22c55e 0%, #16a34a 100%);
+  box-shadow: 0 0 0 2px rgba(34, 197, 94, 0.2);
+}
+
+.mobileSwitch input:checked + .mobileSlider:before {
+  transform: translateX(20px);
+}
+
+/* Responsive Design */
+
+/* Large Screens (1200px and up) */
+@media (min-width: 1200px) {
+  .container {
+    padding: 32px;
   }
-  to {
-    opacity: 1;
-    transform: translateY(0);
+  
+  .card {
+    padding: 40px;
+  }
+  
+  .title {
+    font-size: 2.25rem;
+  }
+  
+  .batchGrid {
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
   }
 }
 
-/* === Responsive === */
-@media (max-width: 600px) {
-  .subHeader {
+/* Desktop (992px to 1199px) */
+@media (max-width: 1199px) and (min-width: 992px) {
+  .container {
+    padding: 28px;
+  }
+  
+  .card {
+    padding: 32px;
+  }
+  
+  .batchGrid {
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  }
+}
+
+/* Tablet (768px to 991px) */
+@media (max-width: 991px) and (min-width: 768px) {
+  .container {
+    padding: 20px;
+  }
+  
+  .card {
+    padding: 24px;
+  }
+  
+  .header {
     flex-direction: column;
-    align-items: flex-start;
-    gap: 10px;
+    align-items: stretch;
+    gap: 20px;
   }
+  
+  .title {
+    font-size: 1.75rem;
+  }
+  
+  .createBtn {
+    align-self: flex-start;
+  }
+  
+  .profileSection {
+    flex-direction: row;
+    gap: 20px;
+  }
+  
+  .profileImage {
+    width: 80px;
+    height: 80px;
+  }
+  
+  .batchGrid {
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  }
+  
+  .modal {
+    max-width: 90vw;
+    margin: 20px;
+  }
+  
+  /* Table responsiveness for tablets */
+  .table th,
+  .table td {
+    padding: 16px 20px;
+  }
+  
+  .trainerCell {
+    min-width: 240px;
+  }
+  
+  .avatar {
+    width: 44px;
+    height: 44px;
+  }
+}
 
-  .trainerInfo {
+/* Mobile Landscape (576px to 767px) */
+@media (max-width: 767px) and (min-width: 576px) {
+  .container {
+    padding: 16px;
+  }
+  
+  .card {
+    padding: 20px;
+    border-radius: 16px;
+  }
+  
+  .header {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 16px;
+  }
+  
+  .title {
+    font-size: 1.5rem;
+  }
+  
+  .createBtn {
+    padding: 10px 20px;
+    font-size: 0.9rem;
+    justify-content: center;
+  }
+  
+  /* Table becomes horizontally scrollable */
+  .tableContainer {
+    border-radius: 12px;
+  }
+  
+  .tableWrapper {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+  
+  .table {
+    min-width: 700px; /* Force horizontal scroll */
+  }
+  
+  .table th,
+  .table td {
+    padding: 12px 16px;
+    font-size: 0.875rem;
+  }
+  
+  .trainerCell {
+    min-width: 200px;
+  }
+  
+  .avatar {
+    width: 40px;
+    height: 40px;
+  }
+  
+  .trainerName {
+    font-size: 0.9rem;
+  }
+  
+  .trainerEmail {
+    font-size: 0.8rem;
+  }
+  
+  .empId {
+    font-size: 0.75rem;
+    padding: 3px 6px;
+  }
+  
+  .roleTag {
+    font-size: 0.75rem;
+    padding: 4px 8px;
+  }
+  
+  .switch {
+    width: 44px;
+    height: 24px;
+  }
+  
+  .slider:before {
+    height: 16px;
+    width: 16px;
+    left: 4px;
+    bottom: 4px;
+  }
+  
+  .switch input:checked + .slider:before {
+    transform: translateX(20px);
+  }
+  
+  .actionBtn {
+    width: 32px;
+    height: 32px;
+  }
+  
+  /* Profile section for mobile landscape */
+  .profileSection {
+    flex-direction: row;
+    gap: 16px;
+    padding: 20px;
+  }
+  
+  .profileImage {
+    width: 70px;
+    height: 70px;
+  }
+  
+  .profileName {
+    font-size: 1.1rem;
+  }
+  
+  .batchGrid {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+  
+  .batchCard {
+    padding: 16px;
+  }
+  
+  /* Modal adjustments */
+  .modal {
+    max-width: calc(100vw - 24px);
+    margin: 12px;
+    max-height: calc(100vh - 24px);
+  }
+  
+  .modalContent {
+    padding: 20px;
+  }
+  
+  .modalTitle {
+    font-size: 1.25rem;
+  }
+  
+  /* Edit form adjustments */
+  .editRow {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+  
+  .editActions {
+    flex-direction: column;
+    gap: 12px;
+  }
+  
+  .editCancelBtn,
+  .editSubmitBtn {
+    width: 100%;
+    padding: 12px 24px;
+  }
+}
+
+/* Mobile Portrait (up to 575px) */
+@media (max-width: 575px) {
+  .container {
+    padding: 12px;
+    background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+  }
+  
+  .card {
+    padding: 16px;
+    border-radius: 12px;
+  }
+  
+  .header {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 12px;
+    margin-bottom: 20px;
+  }
+  
+  .title {
+    font-size: 1.25rem;
+    text-align: center;
+  }
+  
+  .subtitle {
+    text-align: center;
+    font-size: 0.875rem;
+  }
+  
+  .createBtn {
+    padding: 12px 16px;
+    font-size: 0.875rem;
+    justify-content: center;
+    border-radius: 12px;
+  }
+  
+  /* Hide table and show mobile card view for very small screens */
+  .tableContainer {
+    display: none;
+  }
+  
+  .mobileCardView {
+    display: flex;
+  }
+  
+  /* Profile section for small mobile */
+  .profileSection {
     flex-direction: column;
     align-items: center;
     text-align: center;
+    gap: 16px;
+    padding: 16px;
+  }
+  
+  .profileImage {
+    width: 80px;
+    height: 80px;
+  }
+  
+  .profileName {
+    font-size: 1rem;
+  }
+  
+  .contactInfo {
+    align-items: center;
+  }
+  
+  .batchGrid {
+    grid-template-columns: 1fr;
+    gap: 10px;
+  }
+  
+  .batchCard {
+    padding: 12px;
+    border-radius: 8px;
+  }
+  
+  .batchCode {
+    font-size: 0.9rem;
+  }
+  
+  /* Modal adjustments for small mobile */
+  .modalOverlay {
+    padding: 16px;
+  }
+  
+  .modal {
+    max-width: 100%;
+    margin: 0;
+    border-radius: 12px;
+    max-height: calc(100vh - 32px);
+  }
+  
+  .modalContent {
+    padding: 16px;
+  }
+  
+  .modalTitle {
+    font-size: 1.1rem;
+    margin-bottom: 16px;
+  }
+  
+  .closeBtn {
+    width: 36px;
+    height: 36px;
+    top: 12px;
+    right: 12px;
+  }
+  
+  /* Edit form for small mobile */
+  .editContainer {
+    padding: 16px;
+  }
+  
+  .editTitle {
+    font-size: 1.1rem;
+  }
+  
+  .editSubtitle {
+    font-size: 0.85rem;
+  }
+  
+  .editRow {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+  
+  .editLabel {
+    font-size: 0.8rem;
+  }
+  
+  .editInput,
+  .editSelect {
+    padding: 12px 14px;
+    font-size: 0.9rem;
+    border-radius: 8px;
+  }
+  
+  .editActions {
+    flex-direction: column;
+    gap: 10px;
+    padding-top: 16px;
+  }
+  
+  .editCancelBtn,
+  .editSubmitBtn {
+    width: 100%;
+    padding: 12px 20px;
+    font-size: 0.9rem;
+    border-radius: 8px;
+  }
+  
+  /* Delete modal for small mobile */
+  .deleteModal {
+    padding: 20px;
+    border-radius: 12px;
+  }
+  
+  .deleteIcon {
+    width: 50px;
+    height: 50px;
+    margin-bottom: 16px;
+  }
+  
+  .deleteTitle {
+    font-size: 1.1rem;
+    margin-bottom: 8px;
+  }
+  
+  .deleteMessage {
+    font-size: 0.9rem;
+    margin-bottom: 20px;
+  }
+  
+  .deleteActions {
+    flex-direction: column;
+    gap: 10px;
+  }
+  
+  .cancelBtn,
+  .deleteBtn {
+    width: 100%;
+    padding: 12px 20px;
+    font-size: 0.9rem;
+    border-radius: 8px;
+  }
+}
+
+/* Very Small Screens (320px and below) */
+@media (max-width: 320px) {
+  .container {
+    padding: 8px;
+    min-height: 100vh;
+  }
+  
+  .card {
+    padding: 12px;
+    border-radius: 8px;
+    margin: 0;
+  }
+  
+  .header {
+    margin-bottom: 16px;
+    gap: 10px;
+  }
+  
+  .title {
+    font-size: 1.1rem;
+    line-height: 1.3;
+  }
+  
+  .subtitle {
+    font-size: 0.8rem;
+    line-height: 1.4;
+  }
+  
+  .createBtn {
+    padding: 10px 12px;
+    font-size: 0.8rem;
+    border-radius: 8px;
+    gap: 6px;
+  }
+  
+  .createBtn svg {
+    width: 16px;
+    height: 16px;
+  }
+  
+  /* Ultra-compact mobile cards */
+  .mobileCard {
+    padding: 12px;
+    border-radius: 8px;
+    gap: 10px;
+  }
+  
+  .mobileCardHeader {
+    margin-bottom: 12px;
+    gap: 8px;
+  }
+  
+  .mobileTrainerInfo {
+    gap: 10px;
+    min-width: 0;
+    flex: 1;
+  }
+  
+  .mobileAvatar {
+    width: 40px;
+    height: 40px;
+    flex-shrink: 0;
+  }
+  
+  .mobileTrainerName {
+    font-size: 0.9rem;
+    line-height: 1.3;
+    margin-bottom: 1px;
+    word-break: break-word;
+  }
+  
+  .mobileTrainerEmail {
+    font-size: 0.75rem;
+    line-height: 1.3;
+    opacity: 0.8;
+    word-break: break-word;
+  }
+  
+  .mobileActions {
+    gap: 6px;
+    flex-shrink: 0;
+  }
+  
+  .mobileActionBtn {
+    width: 32px;
+    height: 32px;
+    border-radius: 6px;
+  }
+  
+  .mobileActionBtn svg {
+    width: 16px;
+    height: 16px;
+  }
+  
+  .mobileDropdown {
+    min-width: 120px;
+    padding: 4px;
+    border-radius: 6px;
+    z-index: 1100;
+    position: absolute;
+    top: calc(100% + 2px);
+    right: 0;
+  }
+  
+  .mobileDropdownItem {
+    padding: 8px 10px;
+    font-size: 0.8rem;
+    border-radius: 4px;
+    gap: 6px;
+  }
+  
+  .mobileDropdownItem svg {
+    width: 14px;
+    height: 14px;
+  }
+  
+  .mobileCardContent {
+    gap: 10px;
+  }
+  
+  .mobileInfoRow {
+    align-items: flex-start;
+    gap: 8px;
+  }
+  
+  .mobileLabel {
+    font-size: 0.8rem;
+    min-width: 40px;
+    flex-shrink: 0;
+  }
+  
+  .mobileValue {
+    font-size: 0.8rem;
+    word-break: break-word;
+  }
+  
+  .mobileRoleTag {
+    padding: 3px 6px;
+    font-size: 0.7rem;
+    border-radius: 4px;
+  }
+  
+  .mobileSwitch {
+    width: 38px;
+    height: 20px;
+    flex-shrink: 0;
+  }
+  
+  .mobileSlider:before {
+    height: 14px;
+    width: 14px;
+    left: 3px;
+    bottom: 3px;
+  }
+  
+  .mobileSwitch input:checked + .mobileSlider:before {
+    transform: translateX(18px);
+  }
+  
+  /* Modal adjustments for ultra-small screens */
+  .modalOverlay {
+    padding: 8px;
+  }
+  
+  .modal {
+    max-width: 100%;
+    margin: 0;
+    border-radius: 8px;
+    max-height: calc(100vh - 16px);
+  }
+  
+  .modalContent {
+    padding: 12px;
+  }
+  
+  .modalTitle {
+    font-size: 1rem;
+    margin-bottom: 12px;
+    line-height: 1.3;
+  }
+  
+  .closeBtn {
+    width: 32px;
+    height: 32px;
+    top: 8px;
+    right: 8px;
+    border-radius: 8px;
+  }
+  
+  .closeBtn svg {
+    width: 16px;
+    height: 16px;
+  }
+  
+  /* Profile section for ultra-small screens */
+  .profileSection {
+    padding: 12px;
+    gap: 12px;
+    border-radius: 8px;
+    margin-bottom: 16px;
+  }
+  
+  .profileImage {
+    width: 60px;
+    height: 60px;
+    border-radius: 12px;
+  }
+  
+  .profileName {
+    font-size: 0.9rem;
+    margin-bottom: 2px;
+  }
+  
+  .profileRole {
+    font-size: 0.8rem;
+    margin-bottom: 12px;
+  }
+  
+  .contactInfo {
+    gap: 6px;
+  }
+  
+  .contactItem {
+    font-size: 0.8rem;
+    gap: 8px;
+  }
+  
+  .contactItem svg {
+    width: 14px;
+    height: 14px;
+    flex-shrink: 0;
+  }
+  
+  /* Batch section for ultra-small screens */
+  .batchesSection {
+    margin-top: 16px;
+  }
+  
+  .sectionTitle {
+    font-size: 0.95rem;
+    margin-bottom: 12px;
+    gap: 8px;
+  }
+  
+  .sectionTitle svg {
+    width: 16px;
+    height: 16px;
+  }
+  
+  .batchGrid {
+    gap: 8px;
+  }
+  
+  .batchCard {
+    padding: 10px;
+    border-radius: 8px;
+  }
+  
+  .batchHeader {
+    margin-bottom: 8px;
+  }
+  
+  .batchCode {
+    font-size: 0.85rem;
+  }
+  
+  .studentCount {
+    padding: 2px 6px;
+    font-size: 0.7rem;
+    border-radius: 4px;
+  }
+  
+  .batchInfo {
+    gap: 6px;
+  }
+  
+  .batchTiming {
+    font-size: 0.8rem;
+    gap: 6px;
+  }
+  
+  .batchTiming svg {
+    width: 12px;
+    height: 12px;
+  }
+  
+  .batchDuration {
+    font-size: 0.75rem;
+  }
+  
+  /* Edit form for ultra-small screens */
+  .editContainer {
+    padding: 12px;
+  }
+  
+  .editHeader {
+    margin-bottom: 16px;
+  }
+  
+  .editTitle {
+    font-size: 1rem;
+    margin-bottom: 4px;
+  }
+  
+  .editSubtitle {
+    font-size: 0.8rem;
+  }
+  
+  .editForm {
+    gap: 16px;
+  }
+  
+  .editRow {
+    gap: 12px;
+  }
+  
+  .editInputGroup {
+    gap: 6px;
+  }
+  
+  .editLabel {
+    font-size: 0.75rem;
+    gap: 6px;
+  }
+  
+  .editLabel svg {
+    width: 14px;
+    height: 14px;
+  }
+  
+  .editInput,
+  .editSelect {
+    padding: 10px 12px;
+    font-size: 0.85rem;
+    border-radius: 6px;
+    border-width: 1px;
+  }
+  
+  .editActions {
+    gap: 8px;
+    padding-top: 12px;
+  }
+  
+  .editCancelBtn,
+  .editSubmitBtn {
+    padding: 10px 16px;
+    font-size: 0.85rem;
+    border-radius: 6px;
+    min-width: 0;
+  }
+  
+  .editSpinner {
+    width: 16px;
+    height: 16px;
+    border-width: 1px;
+  }
+  
+  /* Delete modal for ultra-small screens */
+  .deleteModal {
+    padding: 16px;
+    border-radius: 8px;
+    max-width: 100%;
+  }
+  
+  .deleteIcon {
+    width: 44px;
+    height: 44px;
+    margin-bottom: 12px;
+  }
+  
+  .deleteIcon svg {
+    width: 20px;
+    height: 20px;
+  }
+  
+  .deleteTitle {
+    font-size: 1rem;
+    margin-bottom: 6px;
+    line-height: 1.3;
+  }
+  
+  .deleteMessage {
+    font-size: 0.85rem;
+    margin-bottom: 16px;
+    line-height: 1.4;
+  }
+  
+  .deleteActions {
+    gap: 8px;
+  }
+  
+  .cancelBtn,
+  .deleteBtn {
+    padding: 10px 16px;
+    font-size: 0.85rem;
+    border-radius: 6px;
+    min-width: 0;
+  }
+}
+
+/* Ultra Small Screens (280px and below - for very old devices) */
+@media (max-width: 280px) {
+  .container {
+    padding: 6px;
+  }
+  
+  .card {
+    padding: 8px;
+    border-radius: 6px;
+  }
+  
+  .title {
+    font-size: 1rem;
+  }
+  
+  .subtitle {
+    font-size: 0.75rem;
+  }
+  
+  .createBtn {
+    padding: 8px 10px;
+    font-size: 0.75rem;
+    gap: 4px;
+  }
+  
+  .createBtn svg {
+    width: 14px;
+    height: 14px;
+  }
+  
+  .mobileCard {
+    padding: 8px;
+    border-radius: 6px;
+  }
+  
+  .mobileAvatar {
+    width: 36px;
+    height: 36px;
+  }
+  
+  .mobileTrainerName {
+    font-size: 0.85rem;
+  }
+  
+  .mobileTrainerEmail {
+    font-size: 0.7rem;
+  }
+  
+  .mobileActionBtn {
+    width: 28px;
+    height: 28px;
+  }
+  
+  .mobileActionBtn svg {
+    width: 14px;
+    height: 14px;
+  }
+  
+  .mobileLabel,
+  .mobileValue {
+    font-size: 0.75rem;
+  }
+  
+  .mobileRoleTag {
+    font-size: 0.65rem;
+    padding: 2px 4px;
+  }
+  
+  .mobileSwitch {
+    width: 32px;
+    height: 18px;
+  }
+  
+  .mobileSlider:before {
+    height: 12px;
+    width: 12px;
+    left: 3px;
+    bottom: 3px;
+  }
+  
+  .mobileSwitch input:checked + .mobileSlider:before {
+    transform: translateX(14px);
+  }
+  
+  .modal {
+    border-radius: 6px;
+  }
+  
+  .modalContent {
+    padding: 10px;
+  }
+  
+  .modalTitle {
+    font-size: 0.9rem;
+  }
+  
+  .profileImage {
+    width: 50px;
+    height: 50px;
+    border-radius: 10px;
+  }
+  
+  .profileName {
+    font-size: 0.85rem;
+  }
+  
+  .profileRole {
+    font-size: 0.75rem;
+  }
+  
+  .contactItem {
+    font-size: 0.75rem;
+  }
+  
+  .contactItem svg {
+    width: 12px;
+    height: 12px;
+  }
+}
+
+/* Mobile Dropdown Animation */
+@keyframes mobileDropdownFadeIn {
+  from {
+    opacity: 0;
+    transform: scale(0.9) translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+/* Touch and Hover States */
+@media (hover: hover) and (pointer: fine) {
+  .tableRow:hover {
+    background: rgba(59, 130, 246, 0.02);
+  }
+  
+  .avatar:hover {
+    transform: scale(1.1);
+    border-color: rgba(59, 130, 246, 0.3);
+  }
+}
+
+/* High DPI Screens */
+@media (-webkit-min-device-pixel-ratio: 2),
+       (min-resolution: 192dpi) {
+  .avatar {
+    image-rendering: -webkit-optimize-contrast;
+    image-rendering: crisp-edges;
+  }
+  
+  .profileImage {
+    image-rendering: -webkit-optimize-contrast;
+    image-rendering: crisp-edges;
   }
 }

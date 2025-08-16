@@ -19,6 +19,7 @@ const Profile = () => {
   const [isEditing, setIsEditing] = useState(false);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
+  const [imageUploading, setImageUploading] = useState(false);
   const [imagePreview, setImagePreview] = useState('');
 
   // Animation variants
@@ -51,37 +52,30 @@ const Profile = () => {
       
       // Try to fetch from API first
       try {
-        const response = await axios.get(`${baseurl}/profile`, {
+        const response = await axios.get(`${baseurl}profile`, {
           headers: {
             Authorization: token
           }
         });
-        
-        const decryptedData = await decryptText(response.data.data);
+        console.log("API response:", response.data);
+        const decryptedData = await decryptText(response.data);
         console.log("Profile data:", decryptedData);
+        
         setProfileData({
-          name: decryptedData.profile.name || '',
-          email: decryptedData.profile.email || '',
-          phone: decryptedData.profile.phone || '',
-          empId: decryptedData.profile.empId || '',
-          dateOfJoining: decryptedData.profile.dateOfJoining ? new Date(decryptedData.dateOfJoining).toISOString().split('T')[0] : '',
-          profileImg: decryptedData.profile.profileImg || ''
+          name: decryptedData.trainer?.name || '',
+          email: decryptedData.trainer?.email || '',
+          phone: decryptedData.trainer?.phone || '',
+          empId: decryptedData.trainer?.empId || '',
+          dateOfJoining: decryptedData.trainer?.dateOfJoining ? new Date(decryptedData.trainer.dateOfJoining).toISOString().split('T')[0] : '',
+          profileImg: decryptedData.trainer?.profileImg || ''
         });
         
-        if (decryptedData.profileImg) {
-          setImagePreview(decryptedData.profileImg);
+        if (decryptedData.trainer?.profileImg) {
+          setImagePreview(decryptedData.trainer.profileImg);
         }
       } catch (apiError) {
-        // If API fails, load sample data for demo
-        console.log('Profile API not available, using sample data');
-        setProfileData({
-          name: 'John Doe',
-          email: 'john.doe@company.com',
-          phone: '+1 (555) 123-4567',
-          empId: 'EMP001',
-          dateOfJoining: '2024-01-15',
-          profileImg: ''
-        });
+        console.error('Error fetching profile:', apiError);
+        toast.error('Failed to load profile data');
       }
       
     } catch (error) {
@@ -104,19 +98,53 @@ const Profile = () => {
     }));
   };
 
-  const handleImageChange = (e) => {
+  const handleImageChange = async (e) => {
     const file = e.target.files?.[0];
     if (file) {
-      const reader = new FileReader();
-      reader.onload = (e) => {
-        const result = e.target?.result;
-        setImagePreview(result);
+      try {
+        setImageUploading(true);
+        // Show loading state while uploading
+        const token = localStorage.getItem('token');
+        
+        // Create FormData for file upload
+        const formData = new FormData();
+        formData.append('profileImage', file);
+        
+        toast.info('Uploading image...');
+        
+        // Upload image to API
+        const response = await axios.post(`${baseurl}upload/profile-image`, formData, {
+          headers: {
+            'Authorization': token,
+            'Content-Type': 'multipart/form-data'
+          }
+        });
+        
+        // Decrypt the response to get the image URL
+        const decryptedResponse = await decryptText(response.data.data);
+        console.log('Image upload response:', decryptedResponse);
+        const imageUrl = decryptedResponse.imageUrl;
+        
+        // Set the image preview and update profile data with the URL
+        setImagePreview(imageUrl);
         setProfileData(prev => ({
           ...prev,
-          profileImg: result
+          profileImg: imageUrl
         }));
-      };
-      reader.readAsDataURL(file);
+        
+        toast.success('Image uploaded successfully!');
+        
+      } catch (error) {
+        console.error('Error uploading image:', error);
+        try {
+          const decryptedError = await decryptText(error.response?.data?.data);
+          toast.error(decryptedError?.message || 'Failed to upload image');
+        } catch {
+          toast.error('Failed to upload image');
+        }
+      } finally {
+        setImageUploading(false);
+      }
     }
   };
 
@@ -126,9 +154,21 @@ const Profile = () => {
       const token = localStorage.getItem('token');
       
       try {
-        const encryptedData = await encryptText(profileData);
+        // Prepare data in the exact format you specified
+        const profileDataToSend = {
+          name: profileData.name,
+          email: profileData.email,
+          phone: profileData.phone,
+          empId: profileData.empId,
+          dateOfJoining: profileData.dateOfJoining,
+          profileImg: profileData.profileImg // Plain URL as requested
+        };
         
-        await axios.put(`${baseurl}/profile`, {
+        console.log('Sending profile data:', profileDataToSend);
+        const encryptedData = await encryptText(profileDataToSend);
+        console.log('Encrypted data:', encryptedData);
+        
+        await axios.put(`${baseurl}profile`, {
           body: encryptedData
         }, {
           headers: {
@@ -138,9 +178,13 @@ const Profile = () => {
         
         toast.success('Profile updated successfully!');
       } catch (apiError) {
-        // If API fails, just show success for demo
-        console.log('Profile API not available, simulating save');
-        toast.success('Profile updated successfully! (Demo mode)');
+        console.error('Error updating profile:', apiError);
+        try {
+          const decryptedError = await decryptText(apiError.response?.data?.data);
+          toast.error(decryptedError?.message || 'Failed to update profile');
+        } catch {
+          toast.error('Failed to update profile');
+        }
       }
       
       setIsEditing(false);
@@ -244,13 +288,18 @@ const Profile = () => {
               )}
               {isEditing && (
                 <div className={styles.imageOverlay}>
-                  <label className={styles.uploadButton}>
-                    <Upload size={20} />
+                  <label className={`${styles.uploadButton} ${imageUploading ? styles.uploading : ''}`}>
+                    {imageUploading ? (
+                      <div className={styles.spinner}></div>
+                    ) : (
+                      <Upload size={20} />
+                    )}
                     <input
                       type="file"
                       accept="image/*"
                       onChange={handleImageChange}
                       className={styles.hiddenInput}
+                      disabled={imageUploading}
                     />
                   </label>
                 </div>
@@ -391,7 +440,7 @@ const Profile = () => {
               </div>
               <div className={styles.statContent}>
                 <h4>Profile Info</h4>
-                <p>{Object.values(profileData).filter(val => val && val.trim()).length}/6 fields completed</p>
+                <p>{Object.values(profileData).filter(val => val && typeof val === 'string' && val.trim() !== '').length}/6 fields completed</p>
               </div>
             </div>
           </div>
