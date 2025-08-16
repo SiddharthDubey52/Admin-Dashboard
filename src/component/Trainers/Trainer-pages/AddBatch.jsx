@@ -174,6 +174,12 @@ const AddBatch = ({ onClose, onSuccess, editingBatch }) => {
     }
   };
 
+  const stepVariants = {
+    hidden: { opacity: 0, x: 50 },
+    visible: { opacity: 1, x: 0 },
+    exit: { opacity: 0, x: -50 }
+  };
+
   const steps = [
     { title: 'Basic Info', fields: ['batchCode', 'batchTiming'] },
     { title: 'Schedule', fields: ['startDate', 'expectedEndDate'] },
@@ -261,285 +267,288 @@ const AddBatch = ({ onClose, onSuccess, editingBatch }) => {
 
       {/* Enhanced Form */}
       <form onSubmit={handleSubmit} className={styles.form}>
-        <AnimatePresence mode="wait">
-          <motion.div
-            key={step}
-            className={styles.stepContent}
-            initial={{ opacity: 0, x: 50 }}
-            animate={{ opacity: 1, x: 0 }}
-            exit={{ opacity: 0, x: -50 }}
-            transition={{ duration: 0.3, ease: [0.4, 0, 0.2, 1] }}
-          >
-            {/* Step 0: Basic Info */}
-            {step === 0 && (
-              <div className={styles.stepFields}>
-                <motion.div className={styles.inputGroup} variants={itemVariants}>
-                  <label className={styles.label}>
-                    <Hash size={18} />
-                    Batch Code
-                    <span className={styles.required}>*</span>
-                  </label>
-                  <motion.div className={styles.inputWrapper}>
-                    <motion.input
-                      type="text"
-                      name="batchCode"
-                      value={formData.batchCode}
-                      onChange={handleChange}
-                      onBlur={handleBlur}
-                      className={`${styles.input} ${errors.batchCode ? styles.error : touched.batchCode && !errors.batchCode ? styles.success : ''}`}
-                      placeholder="Enter batch code (e.g., BATCH001)"
-                      variants={inputVariants}
-                      whileFocus="focus"
-                      required
-                    />
+        <div className={styles.stepContent}>
+          <AnimatePresence mode="wait">
+            <motion.div
+              key={step}
+              variants={stepVariants}
+              initial="hidden"
+              animate="visible"
+              exit="exit"
+              transition={{ duration: 0.3, ease: [0.4, 0, 0.2, 1] }}
+              className={styles.stepContentInner}
+            >
+              {/* Step 0: Basic Info */}
+              {step === 0 && (
+                <div className={styles.stepFields}>
+                  <motion.div className={styles.inputGroup} variants={itemVariants}>
+                    <label className={styles.label}>
+                      <Hash size={18} />
+                      Batch Code
+                      <span className={styles.required}>*</span>
+                    </label>
+                    <motion.div className={styles.inputWrapper}>
+                      <motion.input
+                        type="text"
+                        name="batchCode"
+                        value={formData.batchCode}
+                        onChange={handleChange}
+                        onBlur={handleBlur}
+                        className={`${styles.input} ${errors.batchCode ? styles.error : touched.batchCode && !errors.batchCode ? styles.success : ''}`}
+                        placeholder="Enter batch code (e.g., BATCH001)"
+                        variants={inputVariants}
+                        whileFocus="focus"
+                        required
+                      />
+                      <AnimatePresence>
+                        {touched.batchCode && !errors.batchCode && (
+                          <motion.div
+                            className={styles.successIcon}
+                            initial={{ scale: 0, opacity: 0 }}
+                            animate={{ scale: 1, opacity: 1 }}
+                            exit={{ scale: 0, opacity: 0 }}
+                          >
+                            <Check size={16} />
+                          </motion.div>
+                        )}
+                      </AnimatePresence>
+                    </motion.div>
                     <AnimatePresence>
-                      {touched.batchCode && !errors.batchCode && (
+                      {errors.batchCode && (
                         <motion.div
-                          className={styles.successIcon}
-                          initial={{ scale: 0, opacity: 0 }}
-                          animate={{ scale: 1, opacity: 1 }}
-                          exit={{ scale: 0, opacity: 0 }}
+                          className={styles.errorMessage}
+                          initial={{ opacity: 0, y: -10 }}
+                          animate={{ opacity: 1, y: 0 }}
+                          exit={{ opacity: 0, y: -10 }}
                         >
-                          <Check size={16} />
+                          <AlertCircle size={14} />
+                          {errors.batchCode}
                         </motion.div>
                       )}
                     </AnimatePresence>
                   </motion.div>
-                  <AnimatePresence>
-                    {errors.batchCode && (
-                      <motion.div
-                        className={styles.errorMessage}
-                        initial={{ opacity: 0, y: -10 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        exit={{ opacity: 0, y: -10 }}
-                      >
-                        <AlertCircle size={14} />
-                        {errors.batchCode}
-                      </motion.div>
-                    )}
-                  </AnimatePresence>
-                </motion.div>
 
-                <motion.div className={styles.inputGroup} variants={itemVariants}>
-                  <label className={styles.label}>
-                    <Clock size={18} />
-                    Batch Timing
-                    <span className={styles.required}>*</span>
-                  </label>
-                  <motion.div className={styles.inputWrapper}>
-                    <motion.input
-                      type="text"
-                      name="batchTiming"
-                      value={formData.batchTiming}
-                      onChange={handleChange}
-                      onBlur={handleBlur}
-                      className={`${styles.input} ${errors.batchTiming ? styles.error : touched.batchTiming && !errors.batchTiming ? styles.success : ''}`}
-                      placeholder="Enter timing (e.g., 9:00 AM - 12:00 PM)"
-                      variants={inputVariants}
-                      whileFocus="focus"
-                      required
-                    />
+                  <motion.div className={styles.inputGroup} variants={itemVariants}>
+                    <label className={styles.label}>
+                      <Clock size={18} />
+                      Batch Timing
+                      <span className={styles.required}>*</span>
+                    </label>
+                    <motion.div className={styles.inputWrapper}>
+                      <motion.input
+                        type="text"
+                        name="batchTiming"
+                        value={formData.batchTiming}
+                        onChange={handleChange}
+                        onBlur={handleBlur}
+                        className={`${styles.input} ${errors.batchTiming ? styles.error : touched.batchTiming && !errors.batchTiming ? styles.success : ''}`}
+                        placeholder="Enter timing (e.g., 9:00 AM - 12:00 PM)"
+                        variants={inputVariants}
+                        whileFocus="focus"
+                        required
+                      />
+                      <AnimatePresence>
+                        {touched.batchTiming && !errors.batchTiming && (
+                          <motion.div
+                            className={styles.successIcon}
+                            initial={{ scale: 0, opacity: 0 }}
+                            animate={{ scale: 1, opacity: 1 }}
+                            exit={{ scale: 0, opacity: 0 }}
+                          >
+                            <Check size={16} />
+                          </motion.div>
+                        )}
+                      </AnimatePresence>
+                    </motion.div>
                     <AnimatePresence>
-                      {touched.batchTiming && !errors.batchTiming && (
+                      {errors.batchTiming && (
                         <motion.div
-                          className={styles.successIcon}
-                          initial={{ scale: 0, opacity: 0 }}
-                          animate={{ scale: 1, opacity: 1 }}
-                          exit={{ scale: 0, opacity: 0 }}
+                          className={styles.errorMessage}
+                          initial={{ opacity: 0, y: -10 }}
+                          animate={{ opacity: 1, y: 0 }}
+                          exit={{ opacity: 0, y: -10 }}
                         >
-                          <Check size={16} />
+                          <AlertCircle size={14} />
+                          {errors.batchTiming}
                         </motion.div>
                       )}
                     </AnimatePresence>
                   </motion.div>
-                  <AnimatePresence>
-                    {errors.batchTiming && (
-                      <motion.div
-                        className={styles.errorMessage}
-                        initial={{ opacity: 0, y: -10 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        exit={{ opacity: 0, y: -10 }}
-                      >
-                        <AlertCircle size={14} />
-                        {errors.batchTiming}
-                      </motion.div>
-                    )}
-                  </AnimatePresence>
-                </motion.div>
-              </div>
-            )}
+                </div>
+              )}
 
-            {/* Step 1: Schedule */}
-            {step === 1 && (
-              <div className={styles.stepFields}>
-                <motion.div className={styles.inputGroup} variants={itemVariants}>
-                  <label className={styles.label}>
-                    <Calendar size={18} />
-                    Start Date
-                    <span className={styles.required}>*</span>
-                  </label>
-                  <motion.div className={styles.inputWrapper}>
-                    <motion.input
-                      type="date"
-                      name="startDate"
-                      value={formData.startDate}
-                      onChange={handleChange}
-                      onBlur={handleBlur}
-                      className={`${styles.input} ${errors.startDate ? styles.error : touched.startDate && !errors.startDate ? styles.success : ''}`}
-                      variants={inputVariants}
-                      whileFocus="focus"
-                      required
-                    />
+              {/* Step 1: Schedule */}
+              {step === 1 && (
+                <div className={styles.stepFields}>
+                  <motion.div className={styles.inputGroup} variants={itemVariants}>
+                    <label className={styles.label}>
+                      <Calendar size={18} />
+                      Start Date
+                      <span className={styles.required}>*</span>
+                    </label>
+                    <motion.div className={styles.inputWrapper}>
+                      <motion.input
+                        type="date"
+                        name="startDate"
+                        value={formData.startDate}
+                        onChange={handleChange}
+                        onBlur={handleBlur}
+                        className={`${styles.input} ${errors.startDate ? styles.error : touched.startDate && !errors.startDate ? styles.success : ''}`}
+                        variants={inputVariants}
+                        whileFocus="focus"
+                        required
+                      />
+                      <AnimatePresence>
+                        {touched.startDate && !errors.startDate && (
+                          <motion.div
+                            className={styles.successIcon}
+                            initial={{ scale: 0, opacity: 0 }}
+                            animate={{ scale: 1, opacity: 1 }}
+                            exit={{ scale: 0, opacity: 0 }}
+                          >
+                            <Check size={16} />
+                          </motion.div>
+                        )}
+                      </AnimatePresence>
+                    </motion.div>
                     <AnimatePresence>
-                      {touched.startDate && !errors.startDate && (
+                      {errors.startDate && (
                         <motion.div
-                          className={styles.successIcon}
-                          initial={{ scale: 0, opacity: 0 }}
-                          animate={{ scale: 1, opacity: 1 }}
-                          exit={{ scale: 0, opacity: 0 }}
+                          className={styles.errorMessage}
+                          initial={{ opacity: 0, y: -10 }}
+                          animate={{ opacity: 1, y: 0 }}
+                          exit={{ opacity: 0, y: -10 }}
                         >
-                          <Check size={16} />
+                          <AlertCircle size={14} />
+                          {errors.startDate}
                         </motion.div>
                       )}
                     </AnimatePresence>
                   </motion.div>
-                  <AnimatePresence>
-                    {errors.startDate && (
-                      <motion.div
-                        className={styles.errorMessage}
-                        initial={{ opacity: 0, y: -10 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        exit={{ opacity: 0, y: -10 }}
-                      >
-                        <AlertCircle size={14} />
-                        {errors.startDate}
-                      </motion.div>
-                    )}
-                  </AnimatePresence>
-                </motion.div>
 
-                <motion.div className={styles.inputGroup} variants={itemVariants}>
-                  <label className={styles.label}>
-                    <Calendar size={18} />
-                    Expected End Date
-                    <span className={styles.required}>*</span>
-                  </label>
-                  <motion.div className={styles.inputWrapper}>
-                    <motion.input
-                      type="date"
-                      name="expectedEndDate"
-                      value={formData.expectedEndDate}
-                      onChange={handleChange}
-                      onBlur={handleBlur}
-                      className={`${styles.input} ${errors.expectedEndDate ? styles.error : touched.expectedEndDate && !errors.expectedEndDate ? styles.success : ''}`}
-                      variants={inputVariants}
-                      whileFocus="focus"
-                      required
-                    />
+                  <motion.div className={styles.inputGroup} variants={itemVariants}>
+                    <label className={styles.label}>
+                      <Calendar size={18} />
+                      Expected End Date
+                      <span className={styles.required}>*</span>
+                    </label>
+                    <motion.div className={styles.inputWrapper}>
+                      <motion.input
+                        type="date"
+                        name="expectedEndDate"
+                        value={formData.expectedEndDate}
+                        onChange={handleChange}
+                        onBlur={handleBlur}
+                        className={`${styles.input} ${errors.expectedEndDate ? styles.error : touched.expectedEndDate && !errors.expectedEndDate ? styles.success : ''}`}
+                        variants={inputVariants}
+                        whileFocus="focus"
+                        required
+                      />
+                      <AnimatePresence>
+                        {touched.expectedEndDate && !errors.expectedEndDate && (
+                          <motion.div
+                            className={styles.successIcon}
+                            initial={{ scale: 0, opacity: 0 }}
+                            animate={{ scale: 1, opacity: 1 }}
+                            exit={{ scale: 0, opacity: 0 }}
+                          >
+                            <Check size={16} />
+                          </motion.div>
+                        )}
+                      </AnimatePresence>
+                    </motion.div>
                     <AnimatePresence>
-                      {touched.expectedEndDate && !errors.expectedEndDate && (
+                      {errors.expectedEndDate && (
                         <motion.div
-                          className={styles.successIcon}
-                          initial={{ scale: 0, opacity: 0 }}
-                          animate={{ scale: 1, opacity: 1 }}
-                          exit={{ scale: 0, opacity: 0 }}
+                          className={styles.errorMessage}
+                          initial={{ opacity: 0, y: -10 }}
+                          animate={{ opacity: 1, y: 0 }}
+                          exit={{ opacity: 0, y: -10 }}
                         >
-                          <Check size={16} />
+                          <AlertCircle size={14} />
+                          {errors.expectedEndDate}
                         </motion.div>
                       )}
                     </AnimatePresence>
                   </motion.div>
-                  <AnimatePresence>
-                    {errors.expectedEndDate && (
-                      <motion.div
-                        className={styles.errorMessage}
-                        initial={{ opacity: 0, y: -10 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        exit={{ opacity: 0, y: -10 }}
-                      >
-                        <AlertCircle size={14} />
-                        {errors.expectedEndDate}
-                      </motion.div>
-                    )}
-                  </AnimatePresence>
-                </motion.div>
-              </div>
-            )}
+                </div>
+              )}
 
-            {/* Step 2: Details */}
-            {step === 2 && (
-              <div className={styles.stepFields}>
-                <motion.div className={styles.inputGroup} variants={itemVariants}>
-                  <label className={styles.label}>
-                    <CheckCircle size={18} />
-                    Status
-                    <span className={styles.required}>*</span>
-                  </label>
-                  <motion.select
-                    name="status"
-                    value={formData.status}
-                    onChange={handleChange}
-                    className={styles.select}
-                    variants={inputVariants}
-                    whileFocus="focus"
-                    required
-                  >
-                    <option value="Ongoing">Ongoing</option>
-                    <option value="Completed">Completed</option>
-                  </motion.select>
-                </motion.div>
-
-                <motion.div className={styles.inputGroup} variants={itemVariants}>
-                  <label className={styles.label}>
-                    <Users size={18} />
-                    Number of Students
-                    <span className={styles.required}>*</span>
-                  </label>
-                  <motion.div className={styles.inputWrapper}>
-                    <motion.input
-                      type="number"
-                      name="numberOfStudents"
-                      value={formData.numberOfStudents}
+              {/* Step 2: Details */}
+              {step === 2 && (
+                <div className={styles.stepFields}>
+                  <motion.div className={styles.inputGroup} variants={itemVariants}>
+                    <label className={styles.label}>
+                      <CheckCircle size={18} />
+                      Status
+                      <span className={styles.required}>*</span>
+                    </label>
+                    <motion.select
+                      name="status"
+                      value={formData.status}
                       onChange={handleChange}
-                      onBlur={handleBlur}
-                      className={`${styles.input} ${errors.numberOfStudents ? styles.error : touched.numberOfStudents && !errors.numberOfStudents ? styles.success : ''}`}
-                      placeholder="Enter number of students"
-                      min="1"
+                      className={styles.select}
                       variants={inputVariants}
                       whileFocus="focus"
                       required
-                    />
+                    >
+                      <option value="Ongoing">Ongoing</option>
+                      <option value="Completed">Completed</option>
+                    </motion.select>
+                  </motion.div>
+
+                  <motion.div className={styles.inputGroup} variants={itemVariants}>
+                    <label className={styles.label}>
+                      <Users size={18} />
+                      Number of Students
+                      <span className={styles.required}>*</span>
+                    </label>
+                    <motion.div className={styles.inputWrapper}>
+                      <motion.input
+                        type="number"
+                        name="numberOfStudents"
+                        value={formData.numberOfStudents}
+                        onChange={handleChange}
+                        onBlur={handleBlur}
+                        className={`${styles.input} ${errors.numberOfStudents ? styles.error : touched.numberOfStudents && !errors.numberOfStudents ? styles.success : ''}`}
+                        placeholder="Enter number of students"
+                        min="1"
+                        variants={inputVariants}
+                        whileFocus="focus"
+                        required
+                      />
+                      <AnimatePresence>
+                        {touched.numberOfStudents && !errors.numberOfStudents && (
+                          <motion.div
+                            className={styles.successIcon}
+                            initial={{ scale: 0, opacity: 0 }}
+                            animate={{ scale: 1, opacity: 1 }}
+                            exit={{ scale: 0, opacity: 0 }}
+                          >
+                            <Check size={16} />
+                          </motion.div>
+                        )}
+                      </AnimatePresence>
+                    </motion.div>
                     <AnimatePresence>
-                      {touched.numberOfStudents && !errors.numberOfStudents && (
+                      {errors.numberOfStudents && (
                         <motion.div
-                          className={styles.successIcon}
-                          initial={{ scale: 0, opacity: 0 }}
-                          animate={{ scale: 1, opacity: 1 }}
-                          exit={{ scale: 0, opacity: 0 }}
+                          className={styles.errorMessage}
+                          initial={{ opacity: 0, y: -10 }}
+                          animate={{ opacity: 1, y: 0 }}
+                          exit={{ opacity: 0, y: -10 }}
                         >
-                          <Check size={16} />
+                          <AlertCircle size={14} />
+                          {errors.numberOfStudents}
                         </motion.div>
                       )}
                     </AnimatePresence>
                   </motion.div>
-                  <AnimatePresence>
-                    {errors.numberOfStudents && (
-                      <motion.div
-                        className={styles.errorMessage}
-                        initial={{ opacity: 0, y: -10 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        exit={{ opacity: 0, y: -10 }}
-                      >
-                        <AlertCircle size={14} />
-                        {errors.numberOfStudents}
-                      </motion.div>
-                    )}
-                  </AnimatePresence>
-                </motion.div>
-              </div>
-            )}
-          </motion.div>
-        </AnimatePresence>
+                </div>
+              )}
+            </motion.div>
+          </AnimatePresence>
+        </div>
 
         {/* Enhanced Actions */}
         <motion.div className={styles.actions} variants={itemVariants}>

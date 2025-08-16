@@ -178,10 +178,18 @@
 }
 
 .stepContent {
-  min-height: 240px;
+  min-height: 400px;
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  justify-content: flex-start;
+  padding: 20px 0;
+  overflow: visible;
+  position: relative;
+}
+
+.stepContentInner {
+  width: 100%;
+  height: 100%;
 }
 
 .stepFields {
