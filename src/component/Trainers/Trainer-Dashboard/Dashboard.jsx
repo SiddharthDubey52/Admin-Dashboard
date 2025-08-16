@@ -27,7 +27,8 @@ import {
   User
 } from "lucide-react";
 import axios from "axios";
-import { baseurl } from "../../../utils/encryptdecrypt";
+import { baseurl, decryptText } from "../../../utils/encryptdecrypt";
+import { toast } from "react-toastify";
 
 
 
@@ -39,12 +40,29 @@ const Dashboard = ({ children }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [searchFocused, setSearchFocused] = useState(false);
   const [profileDropdownOpen, setProfileDropdownOpen] = useState(false);
+  
+  // Profile data state
+  const [profileData, setProfileData] = useState({
+    name: '',
+    email: '',
+    phone: '',
+    empId: '',
+    dateOfJoining: '',
+    profileImg: '',
+    role: 'Trainer'
+  });
+  const [profileLoading, setProfileLoading] = useState(true);
 
   const menuItems = [
     { path: "/dashboard", label: "Dashboard", icon: BarChart3, content: 'dashboard' },
     { path: "/Batches", label: "Batch", icon: Users, content: 'Batches' },
     // { path: "/Profile", label: "Profile", icon: User, content: 'Profile' },
   ];
+
+  // Helper function to get profile image with fallback
+  const getProfileImage = () => {
+    return profileData.profileImg || 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=150&h=150';
+  };
 
   const token = localStorage.getItem('token');
 
@@ -59,7 +77,59 @@ const Dashboard = ({ children }) => {
     
    
   };
+  const fetchProfile = async () => {
+    try {
+      setProfileLoading(true);
+      const token = localStorage.getItem('token');
+      
+      if (!token) {
+        console.log('No token found, redirecting to login');
+        navigate('/');
+        return;
+      }
+      
+      const response = await axios.get(`${baseurl}/profile`, {
+        headers: {
+          Authorization: token
+        }
+      });
+      
+      console.log("API response:", response.data);
+      const decryptedData = await decryptText(response.data);
+      console.log("Profile data:", decryptedData);
+      
+      if (decryptedData && decryptedData.trainer) {
+        setProfileData({
+          name: decryptedData.trainer.name || 'Trainer',
+          email: decryptedData.trainer.email || '',
+          phone: decryptedData.trainer.phone || '',
+          empId: decryptedData.trainer.empId || '',
+          dateOfJoining: decryptedData.trainer.dateOfJoining ? new Date(decryptedData.trainer.dateOfJoining).toISOString().split('T')[0] : '',
+          profileImg: decryptedData.trainer.profileImg || '',
+          role: decryptedData.trainer.role || 'Trainer'
+        });
+      }
+    } catch (error) {
+      console.error('Error fetching profile:', error);
+      // Set default values if API fails
+      setProfileData({
+        name: 'Trainer',
+        email: '',
+        phone: '',
+        empId: '',
+        dateOfJoining: '',
+        profileImg: '',
+        role: 'Trainer'
+      });
+      toast.error('Failed to load profile data');
+    } finally {
+      setProfileLoading(false);
+    }
+  };
 
+  useEffect(() => {
+    fetchProfile();
+  }, []);
   const handleLogout = async() => {
     try{
       const response = await axios.post(`${baseurl}/logout`,{},{
@@ -154,15 +224,22 @@ const Dashboard = ({ children }) => {
           <div className={styles.userInfo}>
             <div className={styles.userAvatar}>
               <img 
-                src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=150&h=150" 
+                src={getProfileImage()} 
                 alt="User" 
                 className={styles.avatarImage}
+                onError={(e) => {
+                  e.target.src = 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=150&h=150';
+                }}
               />
               <div className={styles.statusIndicator}></div>
             </div>
             <div className={styles.userDetails}>
-              <span className={styles.userName}>Trainer</span>
-              <span className={styles.userRole}>Trainer-1</span>
+              <span className={styles.userName}>
+                {profileLoading ? 'Loading...' : (profileData.name || 'Trainer')}
+              </span>
+              <span className={styles.userRole}>
+                {profileLoading ? 'Loading...' : (profileData.role || 'Trainer')}
+              </span>
             </div>
           </div>
           <div className={styles.profileActions}>
@@ -227,9 +304,12 @@ const Dashboard = ({ children }) => {
                 onClick={() => setProfileDropdownOpen(!profileDropdownOpen)}
               >
                 <img 
-                  src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=150&h=150" 
+                  src={getProfileImage()} 
                   alt="Profile" 
                   className={styles.profileAvatar}
+                  onError={(e) => {
+                    e.target.src = 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=150&h=150';
+                  }}
                 />
                 <ChevronDown size={16} className={styles.profileChevron} />
               </button>
@@ -280,8 +360,10 @@ const Dashboard = ({ children }) => {
                   <div className={styles.cardHeader}>
                     <Home size={24} className={styles.cardIcon} />
                     <div>
-                      <h2 className={styles.cardTitle}>Welcome Back!</h2>
-                      <p className={styles.cardSubtitle}>Here's what's happening with your projects today.</p>
+                      <h2 className={styles.cardTitle}>
+                        Welcome Back{profileData.name ? `, ${profileData.name}` : ''}!
+                      </h2>
+                      <p className={styles.cardSubtitle}>Here's what's happening with your training sessions today.</p>
                     </div>
                   </div>
                   <div className={styles.statsGrid}>

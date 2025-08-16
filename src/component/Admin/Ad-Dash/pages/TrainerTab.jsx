@@ -152,7 +152,8 @@ const TrainerTab = () => {
   useEffect(() => {
     fetchTrainers();
   }, []);
-
+//  const decryptImg = decryptText(trainers.profileImage)
+//  console.log("Decrypted Image URL:", decryptImg);
   // Close dropdown when clicking outside
   useEffect(() => {
     const handleClickOutside = (event) => {
