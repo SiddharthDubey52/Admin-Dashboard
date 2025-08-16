@@ -229,7 +229,7 @@ const BatchTab = () => {
     if (!result) return;
     
     try {
-      await axios.delete(`${baseurl}/api/v1/batches/${id}`);
+      await axios.delete(`${baseurl}batches/${id}`);
       toast.success('Batch deleted successfully');
       fetchBatches();
     } catch (error) {
