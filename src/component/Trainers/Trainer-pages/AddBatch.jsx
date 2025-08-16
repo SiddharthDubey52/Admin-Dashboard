@@ -27,7 +27,7 @@ const AddBatch = ({ onClose, onSuccess, editingBatch }) => {
     switch (name) {
       case 'batchCode':
         return !value ? 'Batch code is required' : 
-               value.length < 3 ? 'Batch code must be at least 3 characters' : '';
+               value.length < 2 ? 'Batch code must be at least 3 characters' : '';
       case 'batchTiming':
         return !value ? 'Batch timing is required' : '';
       case 'startDate':
@@ -105,7 +105,7 @@ const AddBatch = ({ onClose, onSuccess, editingBatch }) => {
       
       let response;
       if (editingBatch) {
-        response = await axios.put(`${baseurl}/api/v1/batches/${editingBatch.id}`, {
+        response = await axios.put(`${baseurl}batches/${editingBatch.id}`, {
           body: encryptedData
         }, {
           headers: {
@@ -113,7 +113,7 @@ const AddBatch = ({ onClose, onSuccess, editingBatch }) => {
           }
         });
       } else {
-        response = await axios.post(`${baseurl}/api/v1/batches`, {
+        response = await axios.post(`${baseurl}batches`, {
           body: encryptedData
         }, {
           headers: {

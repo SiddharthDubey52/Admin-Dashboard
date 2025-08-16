@@ -19,7 +19,7 @@ const BatchTab = () => {
   const [viewMode, setViewMode] = useState('grid');
   const [showFilters, setShowFilters] = useState(false);
   const [sortBy, setSortBy] = useState('newest');
-
+  const token = localStorage.getItem('token');
   // Spring animations for smooth interactions
   const searchSpring = useSpring(searchTerm ? 1 : 0, { stiffness: 400, damping: 25 });
   const searchScale = useTransform(searchSpring, [0, 1], [1, 1.02]);
@@ -134,9 +134,14 @@ const BatchTab = () => {
   const fetchBatches = async () => {
     try {
       setIsLoading(true);
-      const response = await axios.get(`${baseurl}/api/v1/batches`);
-      const decryptedData = await decryptText(response.data.data);
-      const batchArray = Array.isArray(decryptedData) ? decryptedData : [];
+      const response = await axios.get(`${baseurl}batches/trainer/my-batches`,{
+        headers:{
+          Authorization: token
+        }
+      });
+      const decryptedData = await decryptText(response.data);
+      console.log(`Fetched Batches:`, decryptedData);
+      const batchArray = Array.isArray(decryptedData.batches) ? decryptedData.batches : [];
       setBatches(batchArray);
       setFilteredBatches(batchArray);
     } catch (error) {

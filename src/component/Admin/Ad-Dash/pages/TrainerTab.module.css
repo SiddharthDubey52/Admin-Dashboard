@@ -1969,3 +1969,120 @@
     image-rendering: crisp-edges;
   }
 }
+
+/* === New Styles for Batch Loading and Status === */
+
+/* Batch loader styles */
+.batchLoader {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 20px;
+  color: #64748b;
+  gap: 16px;
+}
+
+.batchLoader .spinner {
+  width: 32px;
+  height: 32px;
+  border: 3px solid #e2e8f0;
+  border-top-color: #3b82f6;
+  border-radius: 50%;
+}
+
+.batchLoader p {
+  margin: 0;
+  font-size: 0.9rem;
+  color: #64748b;
+}
+
+/* Loading text in section title */
+.loadingText {
+  font-size: 0.75rem;
+  color: #3b82f6;
+  font-weight: 500;
+}
+
+/* No batches state */
+.noBatches {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 60px 20px;
+  color: #64748b;
+  text-align: center;
+  gap: 16px;
+}
+
+.noBatches svg {
+  color: #cbd5e1;
+}
+
+.noBatches p {
+  margin: 0;
+  font-size: 1rem;
+  color: #64748b;
+}
+
+/* Enhanced batch card styles */
+.batchStatus {
+  margin-top: 8px;
+  display: flex;
+  justify-content: flex-start;
+}
+
+.statusBadge {
+  padding: 4px 8px;
+  border-radius: 6px;
+  font-size: 0.75rem;
+  font-weight: 500;
+  text-transform: capitalize;
+}
+
+.statusBadge.active {
+  background-color: #dcfce7;
+  color: #166534;
+}
+
+.statusBadge.inactive {
+  background-color: #fef2f2;
+  color: #dc2626;
+}
+
+.statusBadge.pending {
+  background-color: #fef3c7;
+  color: #d97706;
+}
+
+.statusBadge.completed {
+  background-color: #ddd6fe;
+  color: #7c3aed;
+}
+
+/* Mobile responsiveness for new elements */
+@media (max-width: 768px) {
+  .batchLoader {
+    padding: 30px 15px;
+  }
+  
+  .batchLoader .spinner {
+    width: 28px;
+    height: 28px;
+  }
+  
+  .noBatches {
+    padding: 40px 15px;
+  }
+  
+  .noBatches svg {
+    width: 40px;
+    height: 40px;
+  }
+  
+  .statusBadge {
+    font-size: 0.7rem;
+    padding: 3px 6px;
+  }
+}

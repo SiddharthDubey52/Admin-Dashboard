@@ -10,6 +10,8 @@ import axios from 'axios';
 const TrainerTab = () => {
   const [trainers, setTrainers] = useState([]);
   const [selectedTrainer, setSelectedTrainer] = useState(null);
+  const [selectedTrainerBatches, setSelectedTrainerBatches] = useState([]);
+  const [batchesLoading, setBatchesLoading] = useState(false);
   const [showAddTrainer, setShowAddTrainer] = useState(false);
   const [showEditTrainer, setShowEditTrainer] = useState(false);
   const [editTrainerData, setEditTrainerData] = useState(null);
@@ -104,8 +106,15 @@ const TrainerTab = () => {
     setOpenDropdown(openDropdown === trainerId ? null : trainerId);
   };
 
-  const openDetails = (trainer) => setSelectedTrainer(trainer);
-  const closeDetails = () => setSelectedTrainer(null);
+  const openDetails = (trainer) => {
+    setSelectedTrainer(trainer);
+    fetchTrainerBatches(trainer._id);
+  };
+
+  const closeDetails = () => {
+    setSelectedTrainer(null);
+    setSelectedTrainerBatches([]);
+  };
   const openAddTrainer = () => setShowAddTrainer(true);
   const closeAddTrainer = () => setShowAddTrainer(false);
   
@@ -146,6 +155,29 @@ const TrainerTab = () => {
     } catch (error) {
       console.error("Error fetching trainers:", error);
       toast.error("Failed to fetch trainers");
+    }
+  };
+
+  // New function to fetch batches for a specific trainer
+  const fetchTrainerBatches = async (trainerId) => {
+    try {
+      setBatchesLoading(true);
+      const token = localStorage.getItem('token');
+      const response = await axios.get(`${baseurl}batches/admin/trainer/${trainerId}`, {
+        headers: {
+          Authorization: token
+        }
+      });
+      
+      const decryptedData = await decryptText(response.data);
+      console.log("Decrypted Trainer Batches Data:", decryptedData);
+      setSelectedTrainerBatches(decryptedData.batches || []);
+    } catch (error) {
+      console.error("Error fetching trainer batches:", error);
+      setSelectedTrainerBatches([]);
+      toast.error("Failed to fetch trainer batches");
+    } finally {
+      setBatchesLoading(false);
     }
   };
 
@@ -530,33 +562,56 @@ const TrainerTab = () => {
                   <h4 className={styles.sectionTitle}>
                     <Users size={20} />
                     Current Batches
+                    {batchesLoading && <span className={styles.loadingText}> (Loading...)</span>}
                   </h4>
-                  <div className={styles.batchGrid}>
-                    {selectedTrainer.batches?.map((batch, idx) => (
+                  
+                  {batchesLoading ? (
+                    <div className={styles.batchLoader}>
                       <motion.div
-                        key={idx}
-                        className={styles.batchCard}
-                        initial={{ opacity: 0, y: 20 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ delay: idx * 0.1 }}
-                        whileHover={{ y: -5, boxShadow: '0 10px 25px rgba(0,0,0,0.1)' }}
-                      >
-                        <div className={styles.batchHeader}>
-                          <h5 className={styles.batchCode}>{batch.code}</h5>
-                          <span className={styles.studentCount}>{batch.students} students</span>
-                        </div>
-                        <div className={styles.batchInfo}>
-                          <div className={styles.batchTiming}>
-                            <Calendar size={14} />
-                            {batch.timing}
+                        className={styles.spinner}
+                        animate={{ rotate: 360 }}
+                        transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
+                      />
+                      <p>Loading batches...</p>
+                    </div>
+                  ) : selectedTrainerBatches.length > 0 ? (
+                    <div className={styles.batchGrid}>
+                      {selectedTrainerBatches.map((batch, idx) => (
+                        <motion.div
+                          key={batch._id || idx}
+                          className={styles.batchCard}
+                          initial={{ opacity: 0, y: 20 }}
+                          animate={{ opacity: 1, y: 0 }}
+                          transition={{ delay: idx * 0.1 }}
+                          whileHover={{ y: -5, boxShadow: '0 10px 25px rgba(0,0,0,0.1)' }}
+                        >
+                          <div className={styles.batchHeader}>
+                            <h5 className={styles.batchCode}>{batch.batchCode || `Batch ${idx + 1}`}</h5>
+                            <span className={styles.studentCount}>{batch.numberOfStudents || 0} students</span>
                           </div>
-                          <div className={styles.batchDuration}>
-                            {batch.start} - {batch.end}
+                          <div className={styles.batchInfo}>
+                            <div className={styles.batchTiming}>
+                              <Calendar size={14} />
+                              {batch.batchTiming || 'Not scheduled'}
+                            </div>
+                            <div className={styles.batchDuration}>
+                              {batch.startDate ? new Date(batch.startDate).toLocaleDateString() : 'Start: TBD'} - {batch.expectedEndDate ? new Date(batch.expectedEndDate).toLocaleDateString() : 'End: TBD'}
+                            </div>
+                            <div className={styles.batchStatus}>
+                              <span className={`${styles.statusBadge} ${styles[batch.status?.toLowerCase() || 'pending']}`}>
+                                {batch.status || 'Pending'}
+                              </span>
+                            </div>
                           </div>
-                        </div>
-                      </motion.div>
-                    ))}
-                  </div>
+                        </motion.div>
+                      ))}
+                    </div>
+                  ) : (
+                    <div className={styles.noBatches}>
+                      <Users size={48} />
+                      <p>No batches assigned to this trainer yet.</p>
+                    </div>
+                  )}
                 </div>
               </motion.div>
             </motion.div>
