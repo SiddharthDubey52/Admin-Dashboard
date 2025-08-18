@@ -4,6 +4,7 @@ import styles from "./Dashboard.module.css";
 import TrainerTab from "../../Admin/Ad-Dash/pages/TrainerTab";
 import BatchTab from "../Trainer-pages/BatchTab";
 import Profile from "../Trainer-pages/Profile";
+import TopicTab from "../Trainer-pages/TopicTab";
 import { 
   BarChart3, 
   Users, 
@@ -24,7 +25,8 @@ import {
   LogOut,
   Home,
   Activity,
-  User
+  User,
+  BookOpen
 } from "lucide-react";
 import axios from "axios";
 import { baseurl, decryptText } from "../../../utils/encryptdecrypt";
@@ -56,6 +58,7 @@ const Dashboard = ({ children }) => {
   const menuItems = [
     { path: "/dashboard", label: "Dashboard", icon: BarChart3, content: 'dashboard' },
     { path: "/Batches", label: "Batch", icon: Users, content: 'Batches' },
+    { path: "/Topics", label: "Topic", icon: BookOpen, content: 'Topics' },
     // { path: "/Profile", label: "Profile", icon: User, content: 'Profile' },
   ];
 
@@ -238,7 +241,7 @@ const Dashboard = ({ children }) => {
                 {profileLoading ? 'Loading...' : (profileData.name || 'Trainer')}
               </span>
               <span className={styles.userRole}>
-                {profileLoading ? 'Loading...' : (profileData.role || 'Trainer')}
+                {profileLoading ? 'Loading...' : (profileData.empId || 'Trainer')}
               </span>
             </div>
           </div>
@@ -353,6 +356,7 @@ const Dashboard = ({ children }) => {
           <div className={`${styles.contentWrapper} ${isLoading ? styles.contentLoading : ''}`}>
             {activeContent === 'trainers' && <TrainerTab />}
             {activeContent === 'Batches' && <BatchTab />}
+            {activeContent === 'Topics' && <TopicTab />}
             {activeContent === 'Profile' && <Profile />}
             {activeContent === 'dashboard' && (
               <div className={styles.dashboardContent}>
